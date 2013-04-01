@@ -24,10 +24,11 @@ public class Main {
         
         
         for (double i = 0; i < uptospeed; i++){
-            porsche.step(deltaTime, level);
-            System.out.println(porsche.getTime());
-            System.out.println(porsche.getPos());
-            System.out.println(porsche.getSpeed());
+            porsche.step(deltaTime+=2.8, level);
+            System.out.println("Time: "+porsche.getTime());
+            System.out.println("Pos: "+porsche.getPos());
+            System.out.println("Speed: "+porsche.getSpeed());
         }
+    System.out.println("deltaTime: "+deltaTime);
     }
 }

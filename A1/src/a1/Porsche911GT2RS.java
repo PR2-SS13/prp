@@ -40,6 +40,10 @@ public class Porsche911GT2RS {
         double accEarth = 9.81;
         this.level = level;
 
+
+
+        //dynamik
+
         double powerProp = Math.abs(this.level) * this.powerPropMax;
         double forcePropMax = this.mass * accEarth;
         double forcePropAbs = Math.min(forcePropMax, powerProp / Math.abs(this.speed));
@@ -49,22 +53,23 @@ public class Porsche911GT2RS {
         double force = forceProp + forceDrag;
 
         //Kinematik
-
-        double acc = force / this.mass;
-        this.speed = this.speed + (acc * deltaTime);
         this.pos = this.pos + (this.speed * deltaTime);
         this.time = (this.time + deltaTime);
+        double acc = force / this.mass;
+        this.speed = this.speed + (acc * deltaTime);
+
 
     }
-    public double getTime(){
+
+    public double getTime() {
         return time;
     }
-    
-    public double getPos(){
+
+    public double getPos() {
         return pos;
     }
-    
-    public double getSpeed(){
+
+    public double getSpeed() {
         return speed;
     }
 }
