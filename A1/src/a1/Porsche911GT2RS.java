@@ -15,9 +15,9 @@ public class Porsche911GT2RS {
     private double powerPropMax; // KW -> (kg*m^2)/s^3
     private double speedMax; // MS
     private double speed; // MS
-    private double level; // 
-    private double pos; //
-    private double time; //
+    private double level;
+    private double pos;
+    private double time; // MilS
     
     // Class Constants
     private static final double ACC_EARTH = 9.81; // M / S²
@@ -42,16 +42,22 @@ public class Porsche911GT2RS {
         set(0.0, 0.0, 0.0, 0.0);
     }
 
-    @Override
-    public String toString() {
-        return "Time: " + this.time
-                + " Position: " + this.pos
-                + " Speed: " + this.speed/KMH_IN_MS;
+    public String toString_NSI() {
+        return "Time: " + this.time+" MilSec"
+                + " - Position: " + this.pos
+                + " - Speed: " + this.speed/KMH_IN_MS+" KM/H"; //converting back to KM/H
     }
+    
+     public String toString_SI() {
+        return "Time: " + this.time+" MilSec"
+                + " - Position: " + this.pos
+                + " - Speed: " + this.speed+" MS";
+    }
+
 
     public void step(double deltaTime, double level) {
 
-        double powerProp; //
+        double powerProp; // level*(kg*m*s^2)
         double forcePropMax; // kg*m*s^-2
         double forcePropAbs; // kg*m*s^-2
         double forceProp; // kg*m*s^-2
@@ -65,9 +71,7 @@ public class Porsche911GT2RS {
         // Dynamik
 
         powerProp = Math.abs(this.level) * this.powerPropMax;
-        // Newton (kg*m/s²) = kg * m/s²
         forcePropMax = this.mass * ACC_EARTH;
-        // Newton (kg*m/s²) = 
         forcePropAbs = Math.min(forcePropMax, powerProp / Math.abs(this.speed));
         forceProp = forcePropAbs * Math.signum(this.level);
         dragConst = Math.abs(powerProp / (Math.pow(this.speedMax, 3.0)));
@@ -93,4 +97,5 @@ public class Porsche911GT2RS {
     public double getSpeed() {
         return speed;
     }
+    
 }

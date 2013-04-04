@@ -22,7 +22,7 @@ public class Main {
         for (double i = 0; i < iter; i++) {
 
             porsche.step(deltaTime, level);
-            System.out.println(porsche.toString());
+            System.out.println(porsche.toString_NSI());
             
         }
         
