@@ -23,6 +23,9 @@ public class Testing {
         coaster[1] = "bbbb";
         Dimension o = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         System.out.println(o.width+" "+o.height);
+       
+       
+        
     }
 
     
@@ -31,6 +34,12 @@ public class Testing {
            return b.length();
     }
     
+    public static int giver (int be){
+         for (int be = 0, be < 20, be++){
+            System.out.println(n);
+        }
+    
+    }
     
     public static int sumTo(int n) {
         int sum = 0;
