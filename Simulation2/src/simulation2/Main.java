@@ -9,5 +9,4 @@ package simulation2;
  * @author kbrusch
  */
 public class Main {
-    
 }

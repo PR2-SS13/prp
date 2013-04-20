@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package simulation2;
+package aufgabe2;
 
 /**
  *
@@ -62,11 +62,9 @@ public class Porsche911 {
         double forceDrag; // kg*m*s^-2
         double force; // kg*m*s^-2
         double acc; // m/s^2
-
         this.level = level;
 
         // Dynamik
-
         powerProp = Math.abs(this.level) * this.powerPropMax;
         forcePropMax = this.mass * ACC_EARTH;
         forcePropAbs = Math.min(forcePropMax, powerProp / Math.abs(this.speed));
@@ -76,54 +74,32 @@ public class Porsche911 {
         force = forceProp + forceDrag;
 
         // Kinematik
-
         this.pos = this.pos + (this.speed * deltaTime);
         acc = force / this.mass;
         this.speed = this.speed + (acc * deltaTime);
         this.time = (this.time + deltaTime);
     }
 
-    public double getTime() {
-        return time;
-    }
+    // Getter & Setter
+    public double getSpeed() { return speed;}
+    public void setSpeed(double speed) {this.speed = speed;}
 
-    public double getPos() {
-        return pos;
-    }
+    public double getPos() {return pos;}
+    public void setPos(double pos) {this.pos = pos;}
 
-    public double getSpeed() {
-        return speed;
-    }
+    public double getTime() {return time;}
+    public void setTime(double time) {this.time = time;}
 
-    public double getMass() {
-        return mass;
-    }
+    public double getMass() {return mass;}
+    public void setMass(double mass) {this.mass = mass;}
 
-    public void setMass(double mass) {
-        this.mass = mass;
-    }
+    public double getPowerPropMax() {return powerPropMax;}
+    public void setPowerPropMax(double powerPropMax) {this.powerPropMax = powerPropMax;}
 
-    public double getPowerPropMax() {
-        return powerPropMax;
-    }
+    public double getSpeedMax() {return speedMax;}
+    public void setSpeedMax(double speedMax) {this.speedMax = speedMax;}
 
-    public void setPowerPropMax(double powerPropMax) {
-        this.powerPropMax = powerPropMax;
-    }
-
-    public double getSpeedMax() {
-        return speedMax;
-    }
-
-    public void setSpeedMax(double speedMax) {
-        this.speedMax = speedMax;
-    }
-
-    public double getLevel() {
-        return level;
-    }
-
-    public void setLevel(double level) {
-        this.level = level;
-    }
+    public double getLevel() {return level;}
+    public void setLevel(double level) {this.level = level;}
+    
 }
