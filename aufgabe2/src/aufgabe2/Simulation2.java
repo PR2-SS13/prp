@@ -16,6 +16,10 @@ import jgame.platform.JGEngine;
 public class Simulation2 extends JGEngine {
 
     private Porsche911 porsche;
+    private static double ICE = 0.1;
+    private static double SNOW = 0.3;
+    private static double WET = 0.7;
+    
 
     public Simulation2() {
         this.initEngineApplet();
@@ -39,5 +43,13 @@ public class Simulation2 extends JGEngine {
         porsche.reset();
         setGameState("Wait");
     }
+    
+    public void doFrame(){
+        
+        getKey(12);
+        
+    }
+    
+    
     
 }

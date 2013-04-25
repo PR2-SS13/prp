@@ -8,7 +8,7 @@ package aufgabe2;
  *
  * @author kbrusch
  */
-public class Porsche911 {
+public class Porsche911 implements ParticleInterface{
 
     // 
     private double mass;
@@ -18,6 +18,7 @@ public class Porsche911 {
     private double level;
     private double pos;
     private double time; // MilS
+    
     // Class Constants
     private static final double ACC_EARTH = 9.81; // M / S²
     private static final double KMH_IN_MS = (1 / 3.6);
@@ -99,7 +100,24 @@ public class Porsche911 {
     public double getSpeedMax() {return speedMax;}
     public void setSpeedMax(double speedMax) {this.speedMax = speedMax;}
 
-    public double getLevel() {return level;}
-    public void setLevel(double level) {this.level = level;}
+    @Override
+    public void simulateStep(float deltaTInSeconds) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public float getXInMeters() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public float getYInMeters() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public float getLevel() {
+        return (float) this.level;
+    }
     
 }
