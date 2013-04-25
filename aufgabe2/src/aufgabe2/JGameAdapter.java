@@ -11,7 +11,6 @@ import jgame.JGPoint;
 public class JGameAdapter {
 
     private static Set particles = new HashSet<ParticleInterface>();
-
     private static Engine engine;
 
     /** Utility class */

@@ -1,16 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package aufgabe2;
 
-/**
- *
- * @author kbrusch
- */
-public class Porsche911 implements ParticleInterface{
+public class Porsche911 implements ParticleInterface {
 
-    // 
+    // Constants
     private double mass;
     private double powerPropMax; // KW -> (kg*m^2)/s^3
     private double speedMax; // MS
@@ -18,6 +10,7 @@ public class Porsche911 implements ParticleInterface{
     private double level;
     private double pos;
     private double time; // MilS
+    private double traction = 1.0;
     
     // Class Constants
     private static final double ACC_EARTH = 9.81; // M / S²
@@ -28,6 +21,7 @@ public class Porsche911 implements ParticleInterface{
         this.mass = mass; // KG
         this.powerPropMax = powerPropMax * KILO;
         this.speedMax = speedMax * KMH_IN_MS;
+        reset();
     }
 
     public void set(double time, double pos, double speed, double level) {
@@ -37,8 +31,8 @@ public class Porsche911 implements ParticleInterface{
         this.time = time;
     }
 
-    public void reset() {
-        set(0.0, 0.0, 0.0, 0.0);
+    public final void reset() {
+        set(0.0, 0.0, 0.1, 0.0);
     }
 
     public String toString_NSI() {
@@ -53,7 +47,7 @@ public class Porsche911 implements ParticleInterface{
                 + " - Speed: " + this.speed + " MS";
     }
 
-    public void step(double deltaTime, double level) {
+    public void step(double deltaTime, double level, double traction) {
 
         double powerProp; // level*(kg*m*s^2)
         double forcePropMax; // kg*m*s^-2
@@ -64,10 +58,11 @@ public class Porsche911 implements ParticleInterface{
         double force; // kg*m*s^-2
         double acc; // m/s^2
         this.level = level;
+        this.traction = traction;
 
         // Dynamik
         powerProp = Math.abs(this.level) * this.powerPropMax;
-        forcePropMax = this.mass * ACC_EARTH;
+        forcePropMax = this.mass * ACC_EARTH * this.traction;
         forcePropAbs = Math.min(forcePropMax, powerProp / Math.abs(this.speed));
         forceProp = forcePropAbs * Math.signum(this.level);
         dragConst = Math.abs(powerProp / (Math.pow(this.speedMax, 3.0)));
@@ -75,6 +70,7 @@ public class Porsche911 implements ParticleInterface{
         force = forceProp + forceDrag;
 
         // Kinematik
+        System.out.println(toString_NSI());
         this.pos = this.pos + (this.speed * deltaTime);
         acc = force / this.mass;
         this.speed = this.speed + (acc * deltaTime);
@@ -82,42 +78,71 @@ public class Porsche911 implements ParticleInterface{
     }
 
     // Getter & Setter
-    public double getSpeed() { return speed;}
-    public void setSpeed(double speed) {this.speed = speed;}
+    public double getSpeed() {
+        return speed;
+    }
 
-    public double getPos() {return pos;}
-    public void setPos(double pos) {this.pos = pos;}
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
 
-    public double getTime() {return time;}
-    public void setTime(double time) {this.time = time;}
+    public double getPos() {
+        return pos;
+    }
 
-    public double getMass() {return mass;}
-    public void setMass(double mass) {this.mass = mass;}
+    public void setPos(double pos) {
+        this.pos = pos;
+    }
 
-    public double getPowerPropMax() {return powerPropMax;}
-    public void setPowerPropMax(double powerPropMax) {this.powerPropMax = powerPropMax;}
+    public double getTime() {
+        return time;
+    }
 
-    public double getSpeedMax() {return speedMax;}
-    public void setSpeedMax(double speedMax) {this.speedMax = speedMax;}
+    public void setTime(double time) {
+        this.time = time;
+    }
 
-    @Override
-    public void simulateStep(float deltaTInSeconds) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public double getMass() {
+        return mass;
+    }
+
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
+
+    public double getPowerPropMax() {
+        return powerPropMax;
+    }
+
+    public void setPowerPropMax(double powerPropMax) {
+        this.powerPropMax = powerPropMax;
+    }
+
+    public double getSpeedMax() {
+        return speedMax;
+    }
+
+    public void setSpeedMax(double speedMax) {
+        this.speedMax = speedMax;
     }
 
     @Override
-    public float getXInMeters() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void simulateStep(double deltaTInSeconds, double steps, double traction) {
+        step(deltaTInSeconds, steps, traction);
     }
 
     @Override
-    public float getYInMeters() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public double getXInMeters() {
+        return this.pos;
     }
 
     @Override
-    public float getLevel() {
-        return (float) this.level;
+    public double getYInMeters() {
+        return 30.0;
     }
-    
+
+    @Override
+    public double getLevel() {
+        return this.level;
+    }
 }

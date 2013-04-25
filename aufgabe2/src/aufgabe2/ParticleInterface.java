@@ -10,11 +10,11 @@ public interface ParticleInterface {
      * 
      * @param deltaTInSeconds
      */
-    void simulateStep(float deltaTInSeconds);
+    void simulateStep(double deltaTInSeconds, double steps, double traction);
     
-    float getXInMeters();
+    double getXInMeters();
 
-    float getYInMeters();
+    double getYInMeters();
 
-    float getLevel();
+    double getLevel();
 }
