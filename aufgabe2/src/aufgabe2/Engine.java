@@ -33,29 +33,72 @@ class Engine extends JGEngine {
         setFrameRate(35, 2);
         lastFrameAtInMillis = System.currentTimeMillis();
     }
-    private static double steps = 0.0;
-    private static double traction = 1.0;
+    private static double steps;
+    private static double traction;
+    private static double break_level;
+    private boolean abs = true;
+    private boolean asr = true;
+    private boolean abflug;
 
     @Override
     public void doFrame() {
 
-        if (getKey(D)) {steps += 0.1; /* increase speed */} 
-        else { steps = 0.0;}
-        
-        if (getKey(A)) {steps -= 0.1; /* decrease speed */}
-        
-        //if (getKey(S)) { /* breaks */}
-        
-        if (getKey(W)) {traction = 0.1;} // Ice
-        else if (getKey(E)) {traction = 0.3;} // Snow
-        else if (getKey(R)) {traction = 0.7;} // Wet
-        else if (getKey(S)) {traction = 0.0;} // None
-        else traction = 1.0;
+        // Increase Speed
+        if (getKey(D)) {
+            steps += 0.1;
+        } // Decrease Speed
+        else if (getKey(A)) {
+            steps -= 0.1;
+        } else {
+            steps = 0.0;
+        }
+
+        // Traction
+        if (getKey(W)) {
+            traction = 0.1;
+        } // Ice
+        else if (getKey(E)) {
+            traction = 0.3;
+        } // Snow
+        else if (getKey(R)) {
+            traction = 0.7;
+        } // Wet
+        else {
+            traction = 1.0;
+        }
+
+        // Break Level
+        if (getKey(S)) {
+            break_level = 1.0;
+        } else {
+            break_level = 0.0;
+        }
+
+        // ABS und ASR
+        if (getKey(1)) {
+            abs = true;
+        } else if (getKey(2)) {
+            abs = false;
+        } else if (getKey(3)) {
+            asr = true;
+        } else if (getKey(4)) {
+            asr = false;
+        }
 
         long currentMillis = System.currentTimeMillis();
         for (Object value : particles) {
             ParticleInterface particle = (ParticleInterface) value;
-            particle.simulateStep((float) (currentMillis - lastFrameAtInMillis) / 1000, steps, traction);
+            
+            /*
+            if (particle.getAbflug()){
+                abflug = true;
+            } else {
+                abflug = false;
+            }
+            */
+            
+            particle.simulateStep((float) (currentMillis - lastFrameAtInMillis) / 1000,
+                    steps, traction, break_level, abs, asr);
         }
         lastFrameAtInMillis = System.currentTimeMillis();
     }

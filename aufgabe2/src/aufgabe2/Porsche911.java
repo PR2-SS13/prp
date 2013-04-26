@@ -11,11 +11,16 @@ public class Porsche911 implements ParticleInterface {
     private double pos;
     private double time; // MilS
     private double traction = 1.0;
+    private boolean abs = true;
+    private boolean asr = true;
+    private boolean abflug;
     
     // Class Constants
     private static final double ACC_EARTH = 9.81; // M / S²
     private static final double KMH_IN_MS = (1 / 3.6);
     private static final double KILO = 1000;
+    private static final double maxLevel = 1.0;
+    private static final double minLevel = -1.0;
 
     public Porsche911(double mass, double powerPropMax, double speedMax) {
         this.mass = mass; // KG
@@ -47,7 +52,7 @@ public class Porsche911 implements ParticleInterface {
                 + " - Speed: " + this.speed + " MS";
     }
 
-    public void step(double deltaTime, double level, double traction) {
+    public void step(double deltaTime, double level, double traction, double break_level, boolean abs, boolean asr) {
 
         double powerProp; // level*(kg*m*s^2)
         double forcePropMax; // kg*m*s^-2
@@ -57,7 +62,8 @@ public class Porsche911 implements ParticleInterface {
         double forceDrag; // kg*m*s^-2
         double force; // kg*m*s^-2
         double acc; // m/s^2
-        this.level = level;
+        double forceBreak;
+        this.level = levelInRange(level);
         this.traction = traction;
 
         // Dynamik
@@ -67,7 +73,26 @@ public class Porsche911 implements ParticleInterface {
         forceProp = forcePropAbs * Math.signum(this.level);
         dragConst = Math.abs(powerProp / (Math.pow(this.speedMax, 3.0)));
         forceDrag = dragConst * Math.pow(this.speed, 2.0) * Math.signum(-(this.speed));
-        force = forceProp + forceDrag;
+        forceBreak = this.mass * break_level * ACC_EARTH * Math.signum(-(this.speed));
+        force = forceProp + forceDrag + forceBreak;
+
+        if (force > forcePropMax) {
+            if (forceBreak > forcePropAbs) {
+                if (abs) {
+                    forceBreak = 1.0;
+                } else {
+                    abflug = true;
+                }
+            } else {
+                if (!asr) {
+                    forcePropMax = forcePropMax / 3;
+                    abflug = true;
+                }
+            }
+        }
+
+        force = forceProp + forceDrag + forceBreak;
+        force = (forcePropMax <= force) ? forcePropMax : force;
 
         // Kinematik
         System.out.println(toString_NSI());
@@ -75,6 +100,16 @@ public class Porsche911 implements ParticleInterface {
         acc = force / this.mass;
         this.speed = this.speed + (acc * deltaTime);
         this.time = (this.time + deltaTime);
+    }
+
+    private static double levelInRange(double level) {
+        if (level > maxLevel) {
+            return maxLevel;
+        }
+        if (level < minLevel) {
+            return minLevel;
+        }
+        return level;
     }
 
     // Getter & Setter
@@ -127,8 +162,9 @@ public class Porsche911 implements ParticleInterface {
     }
 
     @Override
-    public void simulateStep(double deltaTInSeconds, double steps, double traction) {
-        step(deltaTInSeconds, steps, traction);
+    public void simulateStep(double deltaTInSeconds, double steps, double traction,
+            double break_level, boolean abs, boolean asr) {
+        step(deltaTInSeconds, steps, traction, break_level, abs, asr);
     }
 
     @Override
@@ -138,11 +174,16 @@ public class Porsche911 implements ParticleInterface {
 
     @Override
     public double getYInMeters() {
-        return 30.0;
+        return 80.0;
     }
 
     @Override
     public double getLevel() {
         return this.level;
+    }
+
+    @Override
+    public boolean getAbflug() {
+        return this.abflug;
     }
 }
