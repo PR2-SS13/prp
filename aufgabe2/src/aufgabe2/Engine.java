@@ -15,7 +15,9 @@ class Engine extends JGEngine {
     private static final int W = 87; // Traction Ice
     private static final int E = 69; // Traction Snow
     private static final int R = 82; // Traction Wet
-
+    
+    public static boolean abflug = false;
+    
     public Engine(JGPoint size) {
         initEngine(size.x, size.y);
     }
@@ -38,7 +40,6 @@ class Engine extends JGEngine {
     private static double break_level;
     private boolean abs = true;
     private boolean asr = true;
-    private boolean abflug;
 
     @Override
     public void doFrame() {
@@ -46,9 +47,6 @@ class Engine extends JGEngine {
         // Increase Speed
         if (getKey(D)) {
             steps += 0.1;
-        } // Decrease Speed
-        else if (getKey(A)) {
-            steps -= 0.1;
         } else {
             steps = 0.0;
         }
@@ -69,34 +67,27 @@ class Engine extends JGEngine {
 
         // Break Level
         if (getKey(S)) {
-            break_level = 1.0;
+            break_level += 0.1;
         } else {
             break_level = 0.0;
         }
 
         // ABS und ASR
-        if (getKey(1)) {
+        if (getKey((int)'G')) {
             abs = true;
-        } else if (getKey(2)) {
+        } else if (getKey((int)'H')) {
             abs = false;
-        } else if (getKey(3)) {
+        } else if (getKey((int)'B')) {
             asr = true;
-        } else if (getKey(4)) {
+        } else if (getKey((int)'N')) {
             asr = false;
         }
+        
+        System.out.println("ABS: " + abs + " ASR: " + asr);
 
         long currentMillis = System.currentTimeMillis();
         for (Object value : particles) {
             ParticleInterface particle = (ParticleInterface) value;
-            
-            /*
-            if (particle.getAbflug()){
-                abflug = true;
-            } else {
-                abflug = false;
-            }
-            */
-            
             particle.simulateStep((float) (currentMillis - lastFrameAtInMillis) / 1000,
                     steps, traction, break_level, abs, asr);
         }
@@ -108,7 +99,15 @@ class Engine extends JGEngine {
         setColor(JGColor.black);
         for (Object value : particles) {
             ParticleInterface particle = (ParticleInterface) value;
-            drawOval(particle.getXInMeters(), particle.getYInMeters(), 5, 5, true, true);
+            if (abflug){
+                System.out.println("ABFLUCH!!!!!yolo");
+                int rand = (int)((Math.random()-0.5)*2*30);
+                drawOval(particle.getXInMeters(), particle.getYInMeters()+rand, 5, 5, true, true);
+            }else{
+                drawOval(particle.getXInMeters(), particle.getYInMeters(), 5, 5, true, true);
+            }
         }
     }
+    
+    
 }

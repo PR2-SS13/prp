@@ -19,6 +19,4 @@ public interface ParticleInterface {
 
     double getLevel();
     
-    boolean getAbflug();
-    
 }

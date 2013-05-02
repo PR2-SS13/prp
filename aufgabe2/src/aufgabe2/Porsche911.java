@@ -11,8 +11,6 @@ public class Porsche911 implements ParticleInterface {
     private double pos;
     private double time; // MilS
     private double traction = 1.0;
-    private boolean abs = true;
-    private boolean asr = true;
     private boolean abflug;
     
     // Class Constants
@@ -45,6 +43,10 @@ public class Porsche911 implements ParticleInterface {
                 + " - Position: " + this.pos
                 + " - Speed: " + this.speed / KMH_IN_MS + " KM/H"; //converting back to KM/H
     }
+    
+    public static void pr(Object a){
+        System.out.println(a);
+    }
 
     public String toString_SI() {
         return "Time: " + this.time + " MilSec"
@@ -52,7 +54,8 @@ public class Porsche911 implements ParticleInterface {
                 + " - Speed: " + this.speed + " MS";
     }
 
-    public void step(double deltaTime, double level, double traction, double break_level, boolean abs, boolean asr) {
+    public void step(double deltaTime, double level, double traction, 
+            double break_level, boolean abs, boolean asr) {
 
         double powerProp; // level*(kg*m*s^2)
         double forcePropMax; // kg*m*s^-2
@@ -61,44 +64,52 @@ public class Porsche911 implements ParticleInterface {
         double dragConst; // kg/m
         double forceDrag; // kg*m*s^-2
         double force; // kg*m*s^-2
+        double forceAcc;
         double acc; // m/s^2
         double forceBreak;
+        double forceTraction;
         this.level = levelInRange(level);
+        break_level = levelInRange(break_level);
         this.traction = traction;
 
         // Dynamik
         powerProp = Math.abs(this.level) * this.powerPropMax;
-        forcePropMax = this.mass * ACC_EARTH * this.traction;
+        forcePropMax = this.mass * ACC_EARTH; // * this.traction;
         forcePropAbs = Math.min(forcePropMax, powerProp / Math.abs(this.speed));
         forceProp = forcePropAbs * Math.signum(this.level);
         dragConst = Math.abs(powerProp / (Math.pow(this.speedMax, 3.0)));
         forceDrag = dragConst * Math.pow(this.speed, 2.0) * Math.signum(-(this.speed));
-        forceBreak = this.mass * break_level * ACC_EARTH * Math.signum(-(this.speed));
-        force = forceProp + forceDrag + forceBreak;
-
-        if (force > forcePropMax) {
-            if (forceBreak > forcePropAbs) {
-                if (abs) {
-                    forceBreak = 1.0;
-                } else {
-                    abflug = true;
-                }
-            } else {
-                if (!asr) {
-                    forcePropMax = forcePropMax / 3;
-                    abflug = true;
-                }
-            }
+        forceBreak = this.mass * break_level * ACC_EARTH;
+        forceAcc = forceProp + forceDrag;
+        forceTraction = this.mass * ACC_EARTH * this.traction;
+        
+        
+        if((!abs && forceTraction<=forceBreak) || (!asr && forceTraction<=forceAcc)){
+            aufgabe2.Engine.abflug=true;
         }
-
-        force = forceProp + forceDrag + forceBreak;
-        force = (forcePropMax <= force) ? forcePropMax : force;
+        else{
+            aufgabe2.Engine.abflug=false;
+        }
+        
+        forceBreak = abs ? Math.min(forceTraction, forceBreak) : forceBreak;
+        forceAcc = asr ? Math.min(forceTraction, forceAcc) : forceAcc;
+        
+        pr("forceTraction: "+forceTraction);
+        pr("forceBreak: "+forceBreak);
+        pr("forceAcc: "+forceAcc);
+        
+        force = forceAcc + forceBreak;
 
         // Kinematik
         System.out.println(toString_NSI());
         this.pos = this.pos + (this.speed * deltaTime);
+        
         acc = force / this.mass;
+        if(break_level != 0) acc = - forceBreak / this.mass;
+        acc = acc*this.traction;
+        
         this.speed = this.speed + (acc * deltaTime);
+        this.speed = (this.speed<0.001) ? 0.001 : this.speed;
         this.time = (this.time + deltaTime);
     }
 
@@ -169,7 +180,7 @@ public class Porsche911 implements ParticleInterface {
 
     @Override
     public double getXInMeters() {
-        return this.pos;
+        return this.pos%400;
     }
 
     @Override
@@ -180,10 +191,5 @@ public class Porsche911 implements ParticleInterface {
     @Override
     public double getLevel() {
         return this.level;
-    }
-
-    @Override
-    public boolean getAbflug() {
-        return this.abflug;
     }
 }
