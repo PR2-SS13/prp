@@ -18,7 +18,13 @@ public interface ParticleInterface {
     double getYInMeters();
 
     double getLevel();
-    
+
+    // My Interface Methods
     void reset();
-    
+
+    double getSpeed();
+
+    double getTime();
+
+    double getPos();
 }

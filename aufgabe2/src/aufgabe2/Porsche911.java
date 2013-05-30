@@ -11,12 +11,10 @@ public class Porsche911 implements ParticleInterface {
     private double pos;
     private double time; // MilS
     private double traction = 1.0;
-    
     // Class Constants
     private static final double ACC_EARTH = 9.81; // M / S²
     private static final double KMH_IN_MS = (1 / 3.6);
     private static final double KILO = 1000;
-
 
     public Porsche911(double mass, double powerPropMax, double speedMax) {
         this.mass = mass; // KG
@@ -101,7 +99,7 @@ public class Porsche911 implements ParticleInterface {
         speed += acc * deltaTime;
         pos += speed * deltaTime;
         time += deltaTime;
-        
+
         // Kinematik
         System.out.println(toString_NSI());
     }
@@ -116,7 +114,7 @@ public class Porsche911 implements ParticleInterface {
 
     // Getter & Setter
     public double getSpeed() {
-        return speed;
+        return speed / KMH_IN_MS;
     }
 
     public void setSpeed(double speed) {
@@ -171,16 +169,16 @@ public class Porsche911 implements ParticleInterface {
 
     @Override
     public double getXInMeters() {
-        if(this.pos >= 400){
+        if (this.pos >= 400) {
             this.pos = 0.0;
-            aufgabe2.Engine.changegraph = !aufgabe2.Engine.changegraph;
+            aufgabe2.Engine.changegraphics = !aufgabe2.Engine.changegraphics;
         }
         return this.pos % 400;
     }
 
     @Override
     public double getYInMeters() {
-        return 60.0;
+        return 80.0;
     }
 
     @Override
