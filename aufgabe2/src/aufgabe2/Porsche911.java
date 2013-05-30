@@ -11,14 +11,12 @@ public class Porsche911 implements ParticleInterface {
     private double pos;
     private double time; // MilS
     private double traction = 1.0;
-    private boolean abflug;
     
     // Class Constants
     private static final double ACC_EARTH = 9.81; // M / S²
     private static final double KMH_IN_MS = (1 / 3.6);
     private static final double KILO = 1000;
-    private static final double maxLevel = 1.0;
-    private static final double minLevel = -1.0;
+
 
     public Porsche911(double mass, double powerPropMax, double speedMax) {
         this.mass = mass; // KG
@@ -32,10 +30,11 @@ public class Porsche911 implements ParticleInterface {
         this.level = level;
         this.pos = pos;
         this.time = time;
+        aufgabe2.Engine.abflug = false;
     }
 
     public final void reset() {
-        set(0.0, 0.0, 0.1, 0.0);
+        set(0.0, 0.0, 0.0, 0.0);
     }
 
     public String toString_NSI() {
@@ -43,8 +42,8 @@ public class Porsche911 implements ParticleInterface {
                 + " - Position: " + this.pos
                 + " - Speed: " + this.speed / KMH_IN_MS + " KM/H"; //converting back to KM/H
     }
-    
-    public static void pr(Object a){
+
+    public static void pr(Object a) {
         System.out.println(a);
     }
 
@@ -54,8 +53,8 @@ public class Porsche911 implements ParticleInterface {
                 + " - Speed: " + this.speed + " MS";
     }
 
-    public void step(double deltaTime, double level, double traction, 
-            double break_level, boolean abs, boolean asr) {
+    public void step(double deltaTime, double level, double traction,
+            double brake_level, boolean abs, boolean asr) {
 
         double powerProp; // level*(kg*m*s^2)
         double forcePropMax; // kg*m*s^-2
@@ -64,63 +63,55 @@ public class Porsche911 implements ParticleInterface {
         double dragConst; // kg/m
         double forceDrag; // kg*m*s^-2
         double force; // kg*m*s^-2
-        double forceAcc;
         double acc; // m/s^2
         double forceBreak;
-        double forceTraction;
-        this.level = levelInRange(level);
-        break_level = levelInRange(break_level);
+        this.level = level;
         this.traction = traction;
 
-        // Dynamik
-        powerProp = Math.abs(this.level) * this.powerPropMax;
-        forcePropMax = this.mass * ACC_EARTH; // * this.traction;
-        forcePropAbs = Math.min(forcePropMax, powerProp / Math.abs(this.speed));
-        forceProp = forcePropAbs * Math.signum(this.level);
-        dragConst = Math.abs(powerProp / (Math.pow(this.speedMax, 3.0)));
-        forceDrag = dragConst * Math.pow(this.speed, 2.0) * Math.signum(-(this.speed));
-        forceBreak = this.mass * break_level * ACC_EARTH;
-        forceAcc = forceProp + forceDrag;
-        forceTraction = this.mass * ACC_EARTH * this.traction;
-        
-        
-        if((!abs && forceTraction<=forceBreak) || (!asr && forceTraction<=forceAcc)){
-            aufgabe2.Engine.abflug=true;
-        }
-        else{
-            aufgabe2.Engine.abflug=false;
-        }
-        
-        forceBreak = abs ? Math.min(forceTraction, forceBreak) : forceBreak;
-        forceAcc = asr ? Math.min(forceTraction, forceAcc) : forceAcc;
-        
-        pr("forceTraction: "+forceTraction);
-        pr("forceBreak: "+forceBreak);
-        pr("forceAcc: "+forceAcc);
-        
-        force = forceAcc + forceBreak;
+        powerProp = Math.abs(level) * powerPropMax;
+        forcePropMax = mass * ACC_EARTH * this.traction;
+        forcePropAbs = (speed == 0) ? ACC_EARTH : powerProp / Math.abs(speed);
+        forceProp = forcePropAbs * Math.signum(level);
+        dragConst = Math.abs(powerPropMax / (Math.pow(speedMax, 3)));
+        forceDrag = dragConst * Math.pow(speed, 2) * Math.signum(-speed);
 
+        forceBreak = (brake_level * mass * ACC_EARTH) * Math.signum(-speed);
+        force = forceProp + forceDrag + forceBreak;
+
+        if (Math.abs(force) > forcePropMax) {
+            //ABS, ASR
+            if (Math.abs(forceBreak) > forcePropAbs) {
+                if (abs == false) {
+                    forceBreak = abs_force(forceBreak);
+                    aufgabe2.Engine.abflug = true;
+                }
+            } else //if (Math.abs(force_brake) < forcePropAbs) {
+            {
+                if (asr == false) {
+                    forceBreak = asr_force(forceBreak);
+                    aufgabe2.Engine.abflug = false;
+                }
+                //Wenn beide nicht an, dann Abflug;
+            }
+        }
+
+        force = Math.min(forcePropMax, force); // Physisch
+        acc = force / mass;
+
+        speed += acc * deltaTime;
+        pos += speed * deltaTime;
+        time += deltaTime;
+        
         // Kinematik
         System.out.println(toString_NSI());
-        this.pos = this.pos + (this.speed * deltaTime);
-        
-        acc = force / this.mass;
-        if(break_level != 0) acc = - forceBreak / this.mass;
-        acc = acc*this.traction;
-        
-        this.speed = this.speed + (acc * deltaTime);
-        this.speed = (this.speed<0.001) ? 0.001 : this.speed;
-        this.time = (this.time + deltaTime);
     }
 
-    private static double levelInRange(double level) {
-        if (level > maxLevel) {
-            return maxLevel;
-        }
-        if (level < minLevel) {
-            return minLevel;
-        }
-        return level;
+    public double asr_force(double force_brake_) {
+        return (force_brake_) / 2;
+    }
+
+    public double abs_force(double force_brake_) {
+        return (force_brake_) / 8;
     }
 
     // Getter & Setter
@@ -180,12 +171,16 @@ public class Porsche911 implements ParticleInterface {
 
     @Override
     public double getXInMeters() {
-        return this.pos%400;
+        if(this.pos >= 400){
+            this.pos = 0.0;
+            aufgabe2.Engine.changegraph = !aufgabe2.Engine.changegraph;
+        }
+        return this.pos % 400;
     }
 
     @Override
     public double getYInMeters() {
-        return 80.0;
+        return 60.0;
     }
 
     @Override

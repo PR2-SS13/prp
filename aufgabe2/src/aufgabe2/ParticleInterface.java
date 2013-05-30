@@ -19,4 +19,6 @@ public interface ParticleInterface {
 
     double getLevel();
     
+    void reset();
+    
 }
