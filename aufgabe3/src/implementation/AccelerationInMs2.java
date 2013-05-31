@@ -5,65 +5,67 @@
 package implementation;
 
 import interfaces.Acceleration;
-import static implementation.Values.*; 
-import static com.google.common.base.Preconditions.*; 
-import interfaces.Level;
+import static implementation.Values.*;
 import interfaces.Speed;
-import interfaces.TimeDiff; 
+import interfaces.TimeDiff;
 
 /**
  *
  * @author abl563
  */
-public class AccelerationInMs2 extends AbstractScalar<Acceleration> 
-        implements Acceleration{
-    
+public class AccelerationInMs2 extends AbstractScalar<Acceleration>
+        implements Acceleration {
+
     private final double ms2; // met/sec^2
-    
-    private AccelerationInMs2(double ms2){
+
+    private AccelerationInMs2(double ms2) {
         this.ms2 = ms2;
     }
-    
+
     // tos, hc, eql, cmp
     @Override
     public String toString() {
         return String.format("AccelerationInMs2{ms2=%.2f}",
-                this.ms2());
+                this.metersec2());
     }
-  
+
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (!(obj instanceof Acceleration)) return false;
-        return this.compareTo((Acceleration)obj) == 0;
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Acceleration)) {
+            return false;
+        }
+        return this.compareTo((Acceleration) obj) == 0;
     }
-  
+
     @Override
     public int hashCode() {
-        return hashDouble(this.ms2());
+        return hashDouble(this.metersec2());
     }
-  
+
     @Override
     public int compareTo(Acceleration a) {
-        return Double.compare(this.ms2(), a.ms2());
-    } 
-    
+        return Double.compare(this.metersec2(), a.metersec2());
+    }
+
     // get, set, bools
     @Override
-    public double ms2(){
+    public double metersec2() {
         return this.ms2;
     }
 
     @Override
     public boolean isZero() {
-        return (this.equals(ZERO_ACCELERATION));
+        return (this.equals(ZERO_ACC));
     }
 
     @Override
     public boolean isValid() {
         return true;
     }
-    
+
     // Calculation
     @Override
     public Acceleration add(Acceleration value) {
@@ -99,10 +101,4 @@ public class AccelerationInMs2 extends AbstractScalar<Acceleration>
     public Speed mul(TimeDiff value) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public Acceleration mul(Level value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

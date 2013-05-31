@@ -8,6 +8,15 @@ package interfaces;
  *
  * @author abl563
  */
-public interface Speed {
-    
+public interface Speed extends PhysicsScalar<Speed>, Comparable<Speed> {
+
+    public double kmh();
+
+    public double ms();
+
+    public Speed mul(Speed speed);
+
+    public Speed abs();
+
+    public Length mul(TimeDiff time);
 }

@@ -8,6 +8,5 @@ package interfaces;
  *
  * @author abl563
  */
-public interface Work {
-    
+public interface Work extends PhysicsScalar<Work>, Comparable<Work> {
 }

@@ -8,6 +8,9 @@ package interfaces;
  *
  * @author abl563
  */
-public interface TimeDiff {
-    
+public interface TimeDiff extends PhysicsScalar<TimeDiff>, Comparable<TimeDiff> {
+
+    public double sec();
+
+    public double hour();
 }

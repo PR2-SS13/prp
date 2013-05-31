@@ -10,10 +10,10 @@ package interfaces;
  */
 public interface Length extends PhysicsScalar<Length>, Comparable<Length> {
     
-    public abstract double m();
+    public abstract double meter();
     
-    public abstract double km();
+    public abstract double kmeter();
     
-    public abstract double circumference();
+    public abstract double feet();
     
 }

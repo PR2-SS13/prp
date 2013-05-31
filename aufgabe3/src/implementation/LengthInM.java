@@ -27,7 +27,7 @@ public class LengthInM extends AbstractScalar<Length> implements Length {
     @Override
     public String toString() {
         return String.format("LengthInM{kilometer=%.2f, meter=%.2f}",
-                this.km(), this.m());
+                this.kmeter(), this.meter());
     }
  
     @Override
@@ -39,12 +39,12 @@ public class LengthInM extends AbstractScalar<Length> implements Length {
  
     @Override
     public int hashCode() {
-        return hashDouble(this.m());
+        return hashDouble(this.meter());
     }
  
     @Override
     public int compareTo(Length o) {
-        return Double.compare(this.m(), o.m());
+        return Double.compare(this.meter(), o.meter());
     }
     
     @Override
@@ -88,17 +88,17 @@ public class LengthInM extends AbstractScalar<Length> implements Length {
     }
 
     @Override
-    public double m() {
+    public double meter() {
         return this.meter;
     }
 
     @Override
-    public double km() {
+    public double kmeter() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public double circumference() {
+    public double feet() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
