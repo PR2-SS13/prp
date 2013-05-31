@@ -27,4 +27,6 @@ public interface ParticleInterface {
     double getTime();
 
     double getPos();
+    
+    void setPos(double pos);
 }

@@ -119,7 +119,6 @@ class Engine extends JGEngine {
         for (Object value : particles) {
             ParticleInterface particle = (ParticleInterface) value;
             drawCharacters(particle);
-            drawDynamicPhys(particle);
             resetIt(particle);
         }
     }
@@ -132,15 +131,17 @@ class Engine extends JGEngine {
             asr = true;
             traction = 1.0;
             steps = 0.0;
+            changegraphics = false;
         }
     }
 
     // drawing and writing methods
-    private void drawDynamicPhys(ParticleInterface particle) {
+    private void drawDynamicPhys(ParticleInterface particle, int rand) {
         String[] hub = {
             "Speed: " + df.format(particle.getSpeed()),
             "Time: " + df.format(particle.getTime()),
-            "X-Pos: " + df.format(particle.getPos())
+            "X-Pos: " + df.format(particle.getXInMeters()),
+            "Y-Pos: " + df.format(particle.getYInMeters() + rand)
         };
         drawAny(hub, 150, 15);
     }
@@ -152,16 +153,16 @@ class Engine extends JGEngine {
                     new JGFont("Arial", 1, 20), JGColor.black);
             rand = (int) ((Math.random() - 0.5) * 2 * 30);
         }
+        drawDynamicPhys(particle, rand);
         drawOneCharacter(particle, rand);
     }
 
     private void drawOneCharacter(ParticleInterface particle, int rand) {
+        double x = particle.getXInMeters(), y = particle.getYInMeters() + rand;
         if (changegraphics) {
-            drawImage(particle.getXInMeters(), particle.getYInMeters() + rand,
-                    "dahlsim", JGColor.black, 0.0, 1.0, 0.3, true);
+            drawImage(x, y + rand, "dahlsim", JGColor.black, 0.0, 1.0, 0.3, true);
         } else {
-            drawImage(particle.getXInMeters(), particle.getYInMeters() + rand,
-                    "zangief", JGColor.black, 0.0, 1.0, 0.3, true);
+            drawImage(x, y + rand, "zangief", JGColor.black, 0.0, 1.0, 0.3, true);
         }
     }
     // For keybindings - iterating in drawKeybindings() with for (String e : keybindings)
@@ -174,7 +175,8 @@ class Engine extends JGEngine {
 
     private void drawKeybindings() {
         String[] keybinddynamics = {
-            "Traction: " + this.traction + " Pedal: " + df.format(this.steps),
+            "Traction: " + this.traction,
+            "Pedal: " + df.format(this.steps),
             "Brakes: " + df.format(this.brake_level),
             "ABS: " + this.abs + " ASR: " + this.asr
         };

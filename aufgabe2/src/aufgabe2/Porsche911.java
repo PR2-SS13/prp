@@ -169,7 +169,7 @@ public class Porsche911 implements ParticleInterface {
 
     @Override
     public double getXInMeters() {
-        if (this.pos >= 400) {
+        if (this.pos >= 400){
             this.pos = 0.0;
             aufgabe2.Engine.changegraphics = !aufgabe2.Engine.changegraphics;
         }
