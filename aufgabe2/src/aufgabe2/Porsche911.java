@@ -9,6 +9,7 @@ public class Porsche911 implements ParticleInterface {
     private double speed; // MS
     private double level;
     private double pos;
+    private double dummypos;
     private double time; // MilS
     private double traction = 1.0;
     // Class Constants
@@ -95,9 +96,13 @@ public class Porsche911 implements ParticleInterface {
 
         force = Math.min(forcePropMax, force); // Physisch
         acc = force / mass;
-
+        
+        double posCalc;
+                
         speed += acc * deltaTime;
-        pos += speed * deltaTime;
+        posCalc = speed * deltaTime;
+        pos += posCalc;
+        dummypos += posCalc;
         time += deltaTime;
 
         // Kinematik
@@ -169,8 +174,8 @@ public class Porsche911 implements ParticleInterface {
 
     @Override
     public double getXInMeters() {
-        if (this.pos >= 400){
-            this.pos = 0.0;
+        if (this.dummypos >= 400){
+            this.dummypos = 0.0;
             aufgabe2.Engine.changegraphics = !aufgabe2.Engine.changegraphics;
         }
         return this.pos % 400;

@@ -140,6 +140,7 @@ class Engine extends JGEngine {
         String[] hub = {
             "Speed: " + df.format(particle.getSpeed()),
             "Time: " + df.format(particle.getTime()),
+            "Meters driven: " + df.format(particle.getPos()),
             "X-Pos: " + df.format(particle.getXInMeters()),
             "Y-Pos: " + df.format(particle.getYInMeters() + rand)
         };
