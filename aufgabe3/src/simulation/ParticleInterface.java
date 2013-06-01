@@ -19,13 +19,12 @@ public interface ParticleInterface {
 
     double getLevel();
 
+    double getPos();
     // My Interface Methods
+
     void reset();
 
-    double getSpeed();
+    boolean getAbflug();
 
-    double getTime();
-
-    double getPos();
-
+    String[] getHubArr();
 }

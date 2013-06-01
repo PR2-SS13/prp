@@ -5,14 +5,34 @@ import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.JGFont;
 import jgame.platform.JGEngine;
-import java.text.DecimalFormat;
 
 class Engine extends JGEngine {
 
     private long lastFrameAtInMillis = System.currentTimeMillis();
     private Set particles;
-    public static boolean abflug = false;
-    private DecimalFormat df = new DecimalFormat("0.00##");
+    // Graphics
+    private final static JGFont lefont = new JGFont("Arial", 1, 8);
+    private final static int WINDOW_WIDTH = 800;
+    private final static int WINDOW_HEIGHT = 400;
+    private double moduloX = WINDOW_HEIGHT;
+    private boolean changegraphics = false;
+    private final static String[] keybindings = {
+        "Level++: KeyRight",
+        "Brake: KeyDown",
+        "ABS on: 'Q', ABS off: 'W'",
+        "ASR on: 'A', ASR off: 'S'",
+        "Traction:",
+        "'1' = 1.0 , '2' = 0.1 (Ice)",
+        "'3' = 0.3 (Snow) , '4' = 0.7 (Wet)",
+        "Reset: 'R'"
+    };
+    // Keyevents
+    private static double steps;
+    private static double traction = 1.0;
+    private static double brake_level;
+    private boolean abs = true;
+    private boolean asr = true;
+    private boolean reset = false;
 
     public Engine(JGPoint size) {
         initEngine(size.x, size.y);
@@ -22,6 +42,7 @@ class Engine extends JGEngine {
         this.particles = particles;
     }
 
+    @Override
     public void initCanvas() {
         setCanvasSettings(25, 15, 16, 16, null, new JGColor(255, 255, 255), null);
     }
@@ -35,12 +56,6 @@ class Engine extends JGEngine {
         setBGImage("back");
         lastFrameAtInMillis = System.currentTimeMillis();
     }
-    private static double steps;
-    private static double traction = 1.0;
-    private static double brake_level;
-    private boolean abs = true;
-    private boolean asr = true;
-    private boolean reset = false;
 
     @Override
     public void doFrame() {
@@ -108,86 +123,61 @@ class Engine extends JGEngine {
         }
         return num;
     }
-    // Callback from engine (getxpos method) if at the side x > 400 change characters
-    public static boolean changegraphics = false;
-    private static JGFont lefont = new JGFont("Arial", 1, 8);
-
-    @Override
-    public void paintFrame() {
-        setColor(JGColor.black);
-        drawKeybindings();
-        for (Object value : particles) {
-            ParticleInterface particle = (ParticleInterface) value;
-            drawCharacters(particle);
-            resetIt(particle);
-        }
-    }
 
     private void resetIt(ParticleInterface particle) {
         if (reset) {
             particle.reset();
             reset = false;
+            changegraphics = false;
             abs = true;
             asr = true;
             traction = 1.0;
             steps = 0.0;
-            changegraphics = false;
+            moduloX = WINDOW_HEIGHT;
         }
     }
 
-    // drawing and writing methods
-    private void drawDynamicPhys(ParticleInterface particle, int rand) {
-        String[] hub = {
-            "Speed: " + df.format(particle.getSpeed()),
-            "Time: " + df.format(particle.getTime()),
-            "Meters driven: " + df.format(particle.getPos()),
-            "X-Pos: " + df.format(particle.getXInMeters()),
-            "Y-Pos: " + df.format(particle.getYInMeters() + rand)
-        };
-        drawAny(hub, 150, 15);
+    @Override
+    public void paintFrame() {
+        setColor(JGColor.black);
+        for (Object value : particles) {
+            ParticleInterface particle = (ParticleInterface) value;
+            drawAny(keybindings, 10, 180);
+            drawAny(particle.getHubArr(), 15, 15);
+            drawCharacters(particle);
+            resetIt(particle);
+        }
     }
 
     private void drawCharacters(ParticleInterface particle) {
-        int rand = 0;
-        if (abflug) {
+        if (particle.getAbflug()) {
             drawString("ABFLUCH!! Y0LOO!!", 200, 60, 0,
                     new JGFont("Arial", 1, 20), JGColor.black);
-            rand = (int) ((Math.random() - 0.5) * 2 * 30);
         }
-        drawDynamicPhys(particle, rand);
-        drawOneCharacter(particle, rand);
+        drawOneCharacter(particle);
     }
 
-    private void drawOneCharacter(ParticleInterface particle, int rand) {
-        double x = particle.getXInMeters(), y = particle.getYInMeters() + rand;
+    private void drawOneCharacter(ParticleInterface particle) {
+        double x = particle.getXInMeters(), y = particle.getYInMeters();
+        if (particle.getPos() >= moduloX) {
+            this.changegraphics = !this.changegraphics;
+            moduloX += WINDOW_HEIGHT;
+        }
         if (changegraphics) {
-            drawImage(x, y + rand, "dahlsim", JGColor.black, 0.0, 1.0, 0.3, true);
+            drawImage(x, y, "dahlsim", JGColor.black, 0.0, 1.0, 0.3, true);
         } else {
-            drawImage(x, y + rand, "zangief", JGColor.black, 0.0, 1.0, 0.3, true);
+            drawImage(x, y, "zangief", JGColor.black, 0.0, 1.0, 0.3, true);
         }
-    }
-    // For keybindings - iterating in drawKeybindings() with for (String e : keybindings)
-    private static String[] keybindings = {
-        "Traction: '1' = 1.0 , '2' = 0.1 (Ice) , '3' = 0.3 (Snow) , '4' = 0.7 (Wet)",
-        "Pedal: accelerate = KeyRight , brake = KeyDown",
-        "ABS on: 'Q', ABS off: 'W' - ASR on: 'A', ASR off: 'S'",
-        "Reset: 'R'"
-    };
-
-    private void drawKeybindings() {
-        String[] keybinddynamics = {
-            "Traction: " + this.traction,
-            "Pedal: " + df.format(this.steps),
-            "Brakes: " + df.format(this.brake_level),
-            "ABS: " + this.abs + " ASR: " + this.asr
-        };
-        drawAny(keybinddynamics, 15, 15);
-        drawAny(this.keybindings, 10, 180);
     }
 
     private void drawAny(String[] towrite, int xoff, int yoff) {
-        for (String keyval : towrite) {
-            drawString(keyval, xoff, yoff, -1, this.lefont, JGColor.white);
+        int beforeyoff = yoff;
+        for (int x = 0; x < towrite.length; x++) {
+            if (x % 4 == 0 && x != 0) {
+                xoff += 100;
+                yoff = beforeyoff;
+            }
+            drawString(towrite[x], xoff, yoff, -1, lefont, JGColor.white);
             yoff += 10;
         }
     }

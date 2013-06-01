@@ -1,5 +1,7 @@
 package simulation;
 
+import java.text.DecimalFormat;
+
 public class Porsche911 implements ParticleInterface {
 
     // Constants
@@ -9,9 +11,12 @@ public class Porsche911 implements ParticleInterface {
     private double speed; // MS
     private double level;
     private double pos;
-    private double dummypos;
     private double time; // MilS
     private double traction = 1.0;
+    private boolean abflug = false;
+    private double brake_level = 0.0;
+    private boolean abs = true;
+    private boolean asr = true;
     // Class Constants
     private static final double ACC_EARTH = 9.81; // M / S²
     private static final double KMH_IN_MS = (1 / 3.6);
@@ -29,11 +34,16 @@ public class Porsche911 implements ParticleInterface {
         this.level = level;
         this.pos = pos;
         this.time = time;
-        simulation.Engine.abflug = false;
     }
 
+    @Override
     public final void reset() {
         set(0.0, 0.0, 0.0, 0.0);
+        this.abs = true;
+        this.asr = true;
+        this.traction = 1.0;
+        this.level = 0.0;
+        this.abflug = false;
     }
 
     public String toString_NSI() {
@@ -66,6 +76,9 @@ public class Porsche911 implements ParticleInterface {
         double forceBreak;
         this.level = level;
         this.traction = traction;
+        this.brake_level = brake_level;
+        this.abs = abs;
+        this.asr = asr;
 
         powerProp = Math.abs(level) * powerPropMax;
         forcePropMax = mass * ACC_EARTH * this.traction;
@@ -74,21 +87,21 @@ public class Porsche911 implements ParticleInterface {
         dragConst = Math.abs(powerPropMax / (Math.pow(speedMax, 3)));
         forceDrag = dragConst * Math.pow(speed, 2) * Math.signum(-speed);
 
-        forceBreak = (brake_level * mass * ACC_EARTH) * Math.signum(-speed);
+        forceBreak = (this.brake_level * mass * ACC_EARTH) * Math.signum(-speed);
         force = forceProp + forceDrag + forceBreak;
 
         if (Math.abs(force) > forcePropMax) {
             //ABS, ASR
             if (Math.abs(forceBreak) > forcePropAbs) {
-                if (abs == false) {
+                if (this.abs == false) {
                     forceBreak = abs_force(forceBreak);
-                    simulation.Engine.abflug = true;
+                    this.abflug = true;
                 }
             } else //if (Math.abs(force_brake) < forcePropAbs) {
             {
-                if (asr == false) {
+                if (this.asr == false) {
                     forceBreak = asr_force(forceBreak);
-                    simulation.Engine.abflug = false;
+                    this.abflug = true;
                 }
                 //Wenn beide nicht an, dann Abflug;
             }
@@ -97,16 +110,17 @@ public class Porsche911 implements ParticleInterface {
         force = Math.min(forcePropMax, force); // Physisch
         acc = force / mass;
 
-        double posCalc;
-
         speed += acc * deltaTime;
-        posCalc = speed * deltaTime;
-        pos += posCalc;
-        dummypos += posCalc;
+        pos += speed * deltaTime;
         time += deltaTime;
 
         // Kinematik
         System.out.println(toString_NSI());
+    }
+
+    @Override
+    public boolean getAbflug() {
+        return this.abflug;
     }
 
     public double asr_force(double force_brake_) {
@@ -117,15 +131,15 @@ public class Porsche911 implements ParticleInterface {
         return (force_brake_) / 8;
     }
 
-    // Getter & Setter
     public double getSpeed() {
-        return speed / KMH_IN_MS;
+        return speed;
     }
 
     public void setSpeed(double speed) {
         this.speed = speed;
     }
 
+    @Override
     public double getPos() {
         return pos;
     }
@@ -174,20 +188,37 @@ public class Porsche911 implements ParticleInterface {
 
     @Override
     public double getXInMeters() {
-        if (this.dummypos >= 400) {
-            this.dummypos = 0.0;
-            simulation.Engine.changegraphics = !simulation.Engine.changegraphics;
-        }
         return this.pos % 400;
     }
 
     @Override
     public double getYInMeters() {
-        return 80.0;
+        if (abflug) {
+            return 80.0 + (int) ((Math.random() - 0.5) * 2 * 30);
+        } else {
+            return 80.0;
+        }
     }
 
     @Override
     public double getLevel() {
         return this.level;
+    }
+    private DecimalFormat df = new DecimalFormat("0.00##");
+
+    @Override
+    public String[] getHubArr() {
+        String[] hub = {
+            "Speed: " + df.format(this.speed / KMH_IN_MS),
+            "Traction: " + this.traction,
+            "Pedal-Level: " + df.format(this.level),
+            "Brakes: " + df.format(this.brake_level),
+            "Time: " + df.format(this.time),
+            "Position: " + df.format(this.pos),
+            "X-Position: " + df.format(getXInMeters()),
+            "Y-Position: " + df.format(getYInMeters()),
+            "ABS: " + this.abs,
+            "ASR: " + this.asr,};
+        return hub;
     }
 }
