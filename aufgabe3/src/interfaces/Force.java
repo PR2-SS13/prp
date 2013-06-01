@@ -8,14 +8,13 @@ package interfaces;
  *
  * @author abl563
  */
-public interface Force {
+public interface Force extends PhysicsScalar<Force>, Comparable<Force> {
 
     public abstract double newton();
 
-    public double kgsec2();
+    public double kgs2();
 
     public Force abs();
 
     public Acceleration div(Mass mass);
-    
 }

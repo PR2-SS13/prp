@@ -5,6 +5,7 @@
 package implementation;
 
 import interfaces.TimeDiff;
+import static implementation.Values.*;
 
 /**
  *
@@ -12,59 +13,89 @@ import interfaces.TimeDiff;
  */
 public class TimeDiffInS extends AbstractScalar<TimeDiff> implements TimeDiff {
 
+    private double sec;
+
+    private TimeDiffInS(double sec) {
+        this.sec = sec;
+    }
+
+    public static TimeDiffInS valueOf(double sec) {
+        return new TimeDiffInS(sec);
+    }
+
     @Override
     public TimeDiff inverse() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.timeDiffInS(-this.sec());
     }
 
     @Override
     public TimeDiff add(TimeDiff value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.timeDiffInS(this.sec() + value.sec());
     }
 
     @Override
     public TimeDiff sub(TimeDiff value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.timeDiffInS(this.sec() - value.sec());
     }
 
     @Override
     public TimeDiff mul(double factor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.timeDiffInS(this.sec() * factor);
     }
 
     @Override
     public TimeDiff div(double factor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.timeDiffInS(this.sec() / factor);
     }
 
     @Override
     public double div(TimeDiff value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (this.sec() / value.sec());
     }
 
     @Override
     public boolean isZero() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.equals(ZERO_TIMEDIFF);
     }
 
     @Override
     public boolean isValid() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return true;
     }
 
     @Override
     public double sec() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.sec;
     }
 
     @Override
     public double hour() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.sec() / H_IN_SECS;
     }
 
     @Override
-    public int compareTo(TimeDiff t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int compareTo(TimeDiff value) {
+        return Double.compare(this.sec(), value.sec());
     }
-    
+
+    @Override
+    public int hashCode() {
+        return hashDouble(this.sec());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof TimeDiff)) {
+            return false;
+        }
+        return this.compareTo((TimeDiff) obj) == 0;
+    }
+
+    @Override
+    public String toString() {
+        return "TimeDiffInS{" + this.sec() + '}';
+    }
 }

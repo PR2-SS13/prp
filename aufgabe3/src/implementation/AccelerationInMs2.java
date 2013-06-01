@@ -22,11 +22,15 @@ public class AccelerationInMs2 extends AbstractScalar<Acceleration>
         this.ms2 = ms2;
     }
 
+    public static AccelerationInMs2 valueOf(double ms2) {
+        return new AccelerationInMs2(ms2);
+    }
+
     // tos, hc, eql, cmp
     @Override
     public String toString() {
         return String.format("AccelerationInMs2{ms2=%.2f}",
-                this.metersec2());
+                this.ms2());
     }
 
     @Override
@@ -42,18 +46,12 @@ public class AccelerationInMs2 extends AbstractScalar<Acceleration>
 
     @Override
     public int hashCode() {
-        return hashDouble(this.metersec2());
+        return hashDouble(this.ms2());
     }
 
     @Override
     public int compareTo(Acceleration a) {
-        return Double.compare(this.metersec2(), a.metersec2());
-    }
-
-    // get, set, bools
-    @Override
-    public double metersec2() {
-        return this.ms2;
+        return Double.compare(this.ms2(), a.ms2());
     }
 
     @Override
@@ -66,39 +64,45 @@ public class AccelerationInMs2 extends AbstractScalar<Acceleration>
         return true;
     }
 
+    // get, set, bools
+    @Override
+    public double ms2() {
+        return this.ms2;
+    }
+
     // Calculation
     @Override
     public Acceleration add(Acceleration value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.accelerationInMs2(this.ms2() + value.ms2());
     }
 
     @Override
     public Acceleration sub(Acceleration value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.accelerationInMs2(this.ms2() - value.ms2());
     }
 
     @Override
     public Acceleration mul(double factor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.accelerationInMs2(this.ms2() * factor);
     }
 
     @Override
     public Acceleration div(double factor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.accelerationInMs2(this.ms2() / factor);
     }
 
     @Override
     public Acceleration inverse() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.accelerationInMs2(-this.ms2());
     }
 
     @Override
     public double div(Acceleration value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.ms2() / value.ms2();
     }
 
     @Override
     public Speed mul(TimeDiff value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.speedInMs(this.ms2() * value.sec());
     }
 }

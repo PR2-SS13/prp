@@ -12,5 +12,5 @@ public interface Power extends PhysicsScalar<Power>, Comparable<Power> {
 
     public double watt();
 
-    public double kilowatt();
+    public double kw();
 }

@@ -12,41 +12,45 @@ import static implementation.Values.*;
  * @author abl563
  */
 public class LengthInM extends AbstractScalar<Length> implements Length {
-    
-    private double meter;
-    
-    private LengthInM(double meter){
-        this.meter = meter;
+
+    private double m;
+
+    private LengthInM(double m) {
+        this.m = m;
     }
-    
-    public static LengthInM valueOf(double meter){
-        return new LengthInM(meter);
+
+    public static LengthInM valueOf(double m) {
+        return new LengthInM(m);
     }
-    
+
     // tos, hc, eql, cmp
     @Override
     public String toString() {
         return String.format("LengthInM{kilometer=%.2f, meter=%.2f}",
-                this.kmeter(), this.meter());
+                this.km(), this.m());
     }
- 
+
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (!(obj instanceof Length)) return false;
-        return this.compareTo((Length)obj) == 0;
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Length)) {
+            return false;
+        }
+        return this.compareTo((Length) obj) == 0;
     }
- 
+
     @Override
     public int hashCode() {
-        return hashDouble(this.meter());
+        return hashDouble(this.m());
     }
- 
+
     @Override
     public int compareTo(Length o) {
-        return Double.compare(this.meter(), o.meter());
+        return Double.compare(this.m(), o.m());
     }
-    
+
     @Override
     public boolean isZero() {
         return (this.equals(ZERO_LENGTH));
@@ -54,52 +58,51 @@ public class LengthInM extends AbstractScalar<Length> implements Length {
 
     @Override
     public boolean isValid() {
-        return !(Double.isNaN(this.meter) || Double.isInfinite(this.meter));
+        return !(Double.isNaN(this.m()) || Double.isInfinite(this.m()));
     }
 
     @Override
     public Length add(Length value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.lengthInM((this.m() + value.m()));
     }
 
     @Override
     public Length sub(Length value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.lengthInM((this.m() - value.m()));
     }
 
     @Override
     public Length mul(double factor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.lengthInM((this.m() * factor));
     }
 
     @Override
     public Length div(double factor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.lengthInM((this.m() / factor));
     }
 
     @Override
     public Length inverse() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.lengthInM(-this.m());
     }
 
     @Override
     public double div(Length value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (this.m() / value.m());
     }
 
     @Override
-    public double meter() {
-        return this.meter;
+    public double m() {
+        return this.m;
     }
 
     @Override
-    public double kmeter() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public double km() {
+        return this.m() / KM_IN_METERS;
     }
 
     @Override
-    public double feet() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public double ft() {
+        return this.m() / FEET_IN_METERS;
     }
-    
 }

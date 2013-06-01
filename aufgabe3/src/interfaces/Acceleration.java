@@ -11,7 +11,7 @@ package interfaces;
 public interface Acceleration extends PhysicsScalar<Acceleration>, 
         Comparable <Acceleration> {
     
-    public abstract double metersec2();
+    public abstract double ms2();
     
     Speed mul(TimeDiff time);
     

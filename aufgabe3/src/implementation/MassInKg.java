@@ -7,6 +7,7 @@ package implementation;
 import interfaces.Acceleration;
 import interfaces.Force;
 import interfaces.Mass;
+import static implementation.Values.*;
 
 /**
  *
@@ -14,59 +15,94 @@ import interfaces.Mass;
  */
 public class MassInKg extends AbstractScalar<Mass> implements Mass {
 
+    private double kg;
+
+    private MassInKg(double kg) {
+        this.kg = kg;
+    }
+
+    public static Mass valueOf(double kg) {
+        return new MassInKg(kg);
+    }
+
     @Override
     public boolean isZero() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.equals(ZERO_MASS);
     }
 
     @Override
     public boolean isValid() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return true;
     }
 
     @Override
     public Mass add(Mass value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.massInKg(this.kg() + value.kg());
     }
 
     @Override
     public Mass sub(Mass value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.massInKg(this.kg() - value.kg());
     }
 
     @Override
     public Mass mul(double factor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.massInKg(this.kg() * factor);
     }
 
     @Override
     public Mass div(double factor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.massInKg(this.kg() / factor);
     }
 
     @Override
     public Mass inverse() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Values.massInKg(-this.kg());
     }
 
     @Override
     public double div(Mass value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.kg() / value.kg();
     }
 
     @Override
-    public double kgram() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public double kg() {
+        return this.kg;
     }
 
     @Override
     public double ton() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.kg / TONS_IN_KG;
     }
 
     @Override
-    public Force mul(Acceleration acc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Force mul(Acceleration value) {
+        return Values.forceInN(this.kg() * value.ms2());
     }
-    
+
+    @Override
+    public int compareTo(Mass value) {
+        return Double.compare(this.kg(), value.kg());
+    }
+
+    @Override
+    public int hashCode() {
+        return hashDouble(this.kg());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Mass)) {
+            return false;
+        }
+        return this.compareTo((Mass) obj) == 0;
+    }
+
+    @Override
+    public String toString() {
+        return "MassInKg{kg: " + this.kg() + ", ton:" + this.ton() + "}";
+    }
 }

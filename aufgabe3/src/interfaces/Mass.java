@@ -8,9 +8,9 @@ package interfaces;
  *
  * @author abl563
  */
-public interface Mass {
+public interface Mass extends PhysicsScalar<Mass>, Comparable<Mass> {
 
-    public double kgram();
+    public double kg();
 
     public double ton();
 
