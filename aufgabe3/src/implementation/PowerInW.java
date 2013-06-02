@@ -45,7 +45,7 @@ public class PowerInW extends AbstractScalar<Power> implements Power {
 
     @Override
     public Power div(double factor) {
-        return Values.powerInW(this.watt() * factor);
+        return Values.powerInW(this.watt() / factor);
     }
 
     @Override

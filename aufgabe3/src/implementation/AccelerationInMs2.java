@@ -98,7 +98,7 @@ public class AccelerationInMs2 extends AbstractScalar<Acceleration>
 
     @Override
     public double div(Acceleration value) {
-        return this.ms2() / value.ms2();
+        return (this.ms2() / value.ms2());
     }
 
     @Override

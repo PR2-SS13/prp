@@ -37,7 +37,7 @@ public class SpeedInMs extends AbstractScalar<Speed> implements Speed {
 
     @Override
     public Speed sub(Speed value) {
-        return Values.speedInMs(this.ms() + value.ms());
+        return Values.speedInMs(this.ms() - value.ms());
     }
 
     @Override

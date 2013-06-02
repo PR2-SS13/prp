@@ -7,12 +7,11 @@ import jgame.JGFont;
 import jgame.platform.JGEngine;
 
 class Engine extends JGEngine {
-
+    
     private long lastFrameAtInMillis = System.currentTimeMillis();
     private Set particles;
     // Graphics
     private final static JGFont lefont = new JGFont("Arial", 1, 8);
-    private final static int WINDOW_WIDTH = 800;
     private final static int WINDOW_HEIGHT = 400;
     private double moduloX = WINDOW_HEIGHT;
     private boolean changegraphics = false;
@@ -28,25 +27,25 @@ class Engine extends JGEngine {
     };
     // Keyevents
     private static double steps;
-    private static double traction = 1.0;
+    private static double ground = 1.0;
     private static double brake_level;
-    private boolean abs = true;
-    private boolean asr = true;
-    private boolean reset = false;
-
+    private static boolean abs = true;
+    private static boolean asr = true;
+    private static boolean reset = false;
+    
     public Engine(JGPoint size) {
         initEngine(size.x, size.y);
     }
-
+    
     public void setParticles(Set particles) {
         this.particles = particles;
     }
-
+    
     @Override
     public void initCanvas() {
         setCanvasSettings(25, 15, 16, 16, null, new JGColor(255, 255, 255), null);
     }
-
+    
     @Override
     public void initGame() {
         setFrameRate(35, 2);
@@ -56,7 +55,7 @@ class Engine extends JGEngine {
         setBGImage("back");
         lastFrameAtInMillis = System.currentTimeMillis();
     }
-
+    
     @Override
     public void doFrame() {
 
@@ -70,15 +69,15 @@ class Engine extends JGEngine {
 
         // Traction
         if (getKey('1')) {
-            traction = 1.0;
+            ground = 1.0;
         } else if (getKey('2')) {
-            traction = 0.1;
+            ground = 0.1;
         } // Ice
         else if (getKey('3')) {
-            traction = 0.3;
+            ground = 0.3;
         } // Snow
         else if (getKey('4')) {
-            traction = 0.7;
+            ground = 0.7;
         } // Wet
 
 
@@ -100,21 +99,21 @@ class Engine extends JGEngine {
         } else if (getKey('S')) {
             asr = false;
         }
-
+        
         if (getKey('R')) {
             reset = true;
         }
-
+        
         System.out.println("ABS: " + abs + " ASR: " + asr);
         long currentMillis = System.currentTimeMillis();
         for (Object value : particles) {
             ParticleInterface particle = (ParticleInterface) value;
             particle.simulateStep((float) (currentMillis - lastFrameAtInMillis) / 1000,
-                    steps, traction, brake_level, abs, asr);
+                    steps, ground, brake_level, abs, asr);
         }
         lastFrameAtInMillis = System.currentTimeMillis();
     }
-
+    
     private double InRange(double num) {
         if (num >= 1.0) {
             return 1.0;
@@ -123,7 +122,7 @@ class Engine extends JGEngine {
         }
         return num;
     }
-
+    
     private void resetIt(ParticleInterface particle) {
         if (reset) {
             particle.reset();
@@ -131,12 +130,12 @@ class Engine extends JGEngine {
             changegraphics = false;
             abs = true;
             asr = true;
-            traction = 1.0;
+            ground = 1.0;
             steps = 0.0;
             moduloX = WINDOW_HEIGHT;
         }
     }
-
+    
     @Override
     public void paintFrame() {
         setColor(JGColor.black);
@@ -148,7 +147,7 @@ class Engine extends JGEngine {
             resetIt(particle);
         }
     }
-
+    
     private void drawCharacters(ParticleInterface particle) {
         if (particle.getAbflug()) {
             drawString("ABFLUCH!! Y0LOO!!", 200, 60, 0,
@@ -156,7 +155,7 @@ class Engine extends JGEngine {
         }
         drawOneCharacter(particle);
     }
-
+    
     private void drawOneCharacter(ParticleInterface particle) {
         double x = particle.getXInMeters(), y = particle.getYInMeters();
         if (particle.getPos() >= moduloX) {
@@ -169,7 +168,7 @@ class Engine extends JGEngine {
             drawImage(x, y, "zangief", JGColor.black, 0.0, 1.0, 0.3, true);
         }
     }
-
+    
     private void drawAny(String[] towrite, int xoff, int yoff) {
         int beforeyoff = yoff;
         for (int x = 0; x < towrite.length; x++) {

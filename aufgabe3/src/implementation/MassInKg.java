@@ -62,7 +62,7 @@ public class MassInKg extends AbstractScalar<Mass> implements Mass {
 
     @Override
     public double div(Mass value) {
-        return this.kg() / value.kg();
+        return (this.kg() / value.kg());
     }
 
     @Override

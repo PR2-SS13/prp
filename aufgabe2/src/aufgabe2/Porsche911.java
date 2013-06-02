@@ -47,9 +47,11 @@ public class Porsche911 implements ParticleInterface {
     }
 
     public String toString_SI() {
-        return "Time: " + this.time + " MilSec"
-                + " - Position: " + this.pos
-                + " - Speed: " + this.speed + " MS";
+        return "Time: " + this.time + "\n"
+                + "Position: " + this.pos + "\n"
+                + "Speed: " + this.speed / KMH_IN_MS + "\n"
+                + "powerPropMax: " + this.powerPropMax + "\n"
+                + "speedMax: " + this.speedMax + "\n";
     }
 
     public void step(double deltaTime, double level, double traction,
@@ -96,9 +98,9 @@ public class Porsche911 implements ParticleInterface {
 
         force = Math.min(forcePropMax, force); // Physisch
         acc = force / mass;
-        
+
         double posCalc;
-                
+
         speed += acc * deltaTime;
         posCalc = speed * deltaTime;
         pos += posCalc;
@@ -106,7 +108,15 @@ public class Porsche911 implements ParticleInterface {
         time += deltaTime;
 
         // Kinematik
-        System.out.println(toString_NSI());
+        System.out.println(toString_SI());
+        System.out.println("powerProp: " + powerProp);
+        System.out.println("forcePropMax: " + forcePropMax);
+        System.out.println("forcePropAbs: " + forcePropAbs);
+        System.out.println("forceProp: " + forceProp);
+        System.out.println("dragConst: " + dragConst);
+        System.out.println("forceDrag: " + forceDrag);
+        System.out.println("forceBreak: " + forceBreak);
+        System.out.println("force: " + force);
     }
 
     public double asr_force(double force_brake_) {
@@ -174,7 +184,7 @@ public class Porsche911 implements ParticleInterface {
 
     @Override
     public double getXInMeters() {
-        if (this.dummypos >= 400){
+        if (this.dummypos >= 400) {
             this.dummypos = 0.0;
             aufgabe2.Engine.changegraphics = !aufgabe2.Engine.changegraphics;
         }
