@@ -75,7 +75,11 @@ public final class Values {
     }
 
     // Power
-    public static Power powerInW(double kw) {
+    public static Power powerInW(double watt) {
+        return PowerInW.valueOf(watt);
+    }
+
+    public static Power powerInKw(double kw) {
         return PowerInW.valueOf(kw * KW_IN_WATT);
     }
 

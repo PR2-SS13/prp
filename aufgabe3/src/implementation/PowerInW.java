@@ -6,6 +6,8 @@ package implementation;
 
 import interfaces.Power;
 import static implementation.Values.*;
+import interfaces.Force;
+import interfaces.Speed;
 
 /**
  *
@@ -51,6 +53,11 @@ public class PowerInW extends AbstractScalar<Power> implements Power {
     @Override
     public double div(Power value) {
         return (this.watt() / value.watt());
+    }
+
+    @Override
+    public Force div(Speed value) {
+        return Values.forceInN(this.watt() / value.ms());
     }
 
     @Override

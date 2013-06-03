@@ -28,16 +28,18 @@ public class Porsche911 implements ParticleInterface {
     // Constants
     private double ground;
     final static Acceleration ACC_EARTH = Values.accelerationInMs2(9.80665); // M / S²
+    private final static Speed sMin = Values.speedInMs(0.0001);
 
     public Porsche911(double mass_, double powerPropMax_, double speedMax_, double ground_) {
         mass = Values.massInKg(mass_);
-        powerPropMax = Values.powerInW(powerPropMax_);
+        powerPropMax = Values.powerInKw(powerPropMax_);
         // MaximumSpeed
         speedMax = Values.speedInKmh(speedMax_);
+        forcePropMax = mass.mul(ACC_EARTH);
         // Windwiderstand
         dragConst = Math.abs(powerPropMax.watt() / (speedMax.mul(speedMax).mul(speedMax)).ms());
         this.ground = ground_;
-        set(0.0, 0.0, 0.0, 0.0);
+        set(0.0, 0.0, sMin.ms(), 0.0);
     }
 
     public void set(double time_, double pos_, double speed_, double level_) {
@@ -87,7 +89,7 @@ public class Porsche911 implements ParticleInterface {
 
         Power powerProp = this.powerPropMax.mul(Math.abs(this.level));
         forcePropMax = mass.mul(this.ground).mul(ACC_EARTH);
-        this.forcePropAbs = (this.speed.isZero()) ? forcePropMax : Values.forceInN(powerProp.div(this.speed.abs().ms()).watt());
+        this.forcePropAbs = (this.speed.isZero()) ? forcePropMax : powerProp.div(this.speed.abs());
         Force forceProp = forcePropAbs.mul(Math.signum(level));
         this.forceDrag = Values.forceInN(this.speed.mul(this.speed).mul(this.dragConst).mul(Math.signum(-this.speed.ms())).ms());
 

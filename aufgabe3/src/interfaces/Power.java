@@ -13,4 +13,6 @@ public interface Power extends PhysicsScalar<Power>, Comparable<Power> {
     public double watt();
 
     public double kw();
+
+    public Force div(Speed speed);
 }
