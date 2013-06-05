@@ -61,7 +61,7 @@ class Engine extends JGEngine {
 
         // Increase Speed
         if (getKey(KeyRight)) {
-            steps += 0.1;
+            steps += 0.02;
             steps = InRange(steps);
         } else {
             steps = 0.0;
@@ -83,7 +83,7 @@ class Engine extends JGEngine {
 
         // Break Level
         if (getKey(KeyDown)) {
-            brake_level += 0.1;
+            brake_level += 0.02;
             brake_level = InRange(brake_level);
         } else {
             brake_level = 0.0;

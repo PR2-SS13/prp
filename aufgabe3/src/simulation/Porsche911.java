@@ -1,7 +1,7 @@
 package simulation;
 
 import java.text.DecimalFormat;
-import implementation.*;
+import static implementation.Values.*;
 import interfaces.*;
 
 public class Porsche911 implements ParticleInterface {
@@ -27,14 +27,14 @@ public class Porsche911 implements ParticleInterface {
     private boolean abflug = false;
     // Constants
     private double ground;
-    final static Acceleration ACC_EARTH = Values.accelerationInMs2(9.80665); // M / S²
-    private final static Speed sMin = Values.speedInMs(0.0001);
+    final static Acceleration ACC_EARTH = accelerationInMs2(9.80665); // M / S²
+    private final static Speed sMin = speedInMs(0.0001);
 
     public Porsche911(double mass_, double powerPropMax_, double speedMax_, double ground_) {
-        mass = Values.massInKg(mass_);
-        powerPropMax = Values.powerInKw(powerPropMax_);
+        mass = massInKg(mass_);
+        powerPropMax = powerInKw(powerPropMax_);
         // MaximumSpeed
-        speedMax = Values.speedInKmh(speedMax_);
+        speedMax = speedInKmh(speedMax_);
         forcePropMax = mass.mul(ACC_EARTH);
         // Windwiderstand
         dragConst = Math.abs(powerPropMax.watt() / (speedMax.mul(speedMax).mul(speedMax)).ms());
@@ -43,9 +43,9 @@ public class Porsche911 implements ParticleInterface {
     }
 
     public void set(double time_, double pos_, double speed_, double level_) {
-        time = Values.timeDiffInS(time_);
-        speed = Values.speedInMs(speed_);
-        pos = Values.lengthInM(pos_);
+        time = timeDiffInS(time_);
+        speed = speedInMs(speed_);
+        pos = lengthInM(pos_);
         level = level_;
     }
 
@@ -91,26 +91,22 @@ public class Porsche911 implements ParticleInterface {
         forcePropMax = mass.mul(this.ground).mul(ACC_EARTH);
         this.forcePropAbs = (this.speed.isZero()) ? forcePropMax : powerProp.div(this.speed.abs());
         Force forceProp = forcePropAbs.mul(Math.signum(level));
-        this.forceDrag = Values.forceInN(this.speed.mul(this.speed).mul(this.dragConst).mul(Math.signum(-this.speed.ms())).ms());
+        this.forceDrag = forceInN(this.speed.mul(this.speed).mul(this.dragConst).mul(Math.signum(-this.speed.ms())).ms());
 
         Force forcePropBrake = this.mass.mul(ACC_EARTH).mul(this.brake_level).mul(Math.signum(-this.speed.ms()));
         this.force = forceProp.add(forceDrag).add(forcePropBrake);
 
         if (this.force.abs().compareTo(this.forcePropMax) == 1) {
-            if (forcePropBrake.abs().compareTo(forcePropAbs) == 1) {
-                if (this.abs == false) {
-                    this.abflug = true;
-                }
-            } else {
-                if (this.asr == false) {
-                    this.abflug = true;
-                }
+            if (!this.abs && forcePropBrake.abs().compareTo(forcePropAbs) == 1) {
+                this.abflug = true;
+            } else if (!this.asr) {
+                this.abflug = true;
             }
         }
 
-        this.force = Values.forceInN(Math.min(this.force.newton(), this.forcePropMax.newton()));
+        this.force = forceInN(Math.min(this.force.newton(), this.forcePropMax.newton()));
 
-        TimeDiff dTime = Values.timeDiffInS(deltaTime);
+        TimeDiff dTime = timeDiffInS(deltaTime);
         this.acc = this.force.div(this.mass);
         this.speed = this.speed.add(this.acc.mul(dTime));
         this.pos = this.pos.add(this.speed.mul(dTime));
@@ -165,7 +161,10 @@ public class Porsche911 implements ParticleInterface {
             "X-Position: " + df.format(getXInMeters()),
             "Y-Position: " + df.format(getYInMeters()),
             "ABS: " + this.abs,
-            "ASR: " + this.asr};
+            "ASR: " + this.asr,
+            "Mass: " + this.mass,
+            "Acc: " + this.acc,
+            "Ground: " + this.ground};
         return hub;
     }
 }
