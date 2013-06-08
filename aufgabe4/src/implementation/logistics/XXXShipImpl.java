@@ -4,11 +4,11 @@
  */
 package implementation.logistics;
 
-import interfaces.logistics.vehicle.Ship;
+import interfaces.logistics.vehicle.XXXClassContainerShip;
 
 /**
  *
  * @author SaCry
  */
-public abstract class AbstractShip implements Ship {
+public class XXXShipImpl extends ContainerShipImpl implements XXXClassContainerShip {
 }

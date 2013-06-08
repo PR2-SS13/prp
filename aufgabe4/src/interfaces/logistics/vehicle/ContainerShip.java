@@ -5,7 +5,6 @@
 package interfaces.logistics.vehicle;
 
 import interfaces.logistics.traits.WithCargo;
-import interfaces.logistics.Ship;
 
 /**
  *
