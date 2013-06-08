@@ -55,5 +55,6 @@ public class logistic {
         UniqueId n = uniqueId(100);
         assertEquals(true, n.idNumber() == 100);
         assertEquals(false, n.idNumber() == 99);
+        System.out.println("W000t");
     }
 }
