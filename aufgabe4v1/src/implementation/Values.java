@@ -4,6 +4,10 @@
  */
 package implementation;
 
+import implementation.logistics.BoundingBoxImpl;
+import implementation.logistics.ContainerStowageImpl;
+import implementation.logistics.NameImpl;
+import implementation.logistics.UniqueIdImpl;
 import implementation.physics.AccelerationInMs2;
 import implementation.physics.TimeDiffInS;
 import implementation.physics.ForceInN;
@@ -11,6 +15,10 @@ import implementation.physics.MassInKg;
 import implementation.physics.LengthInM;
 import implementation.physics.PowerInW;
 import implementation.physics.SpeedInMs;
+import interfaces.logistics.BoundingBox;
+import interfaces.logistics.Name;
+import interfaces.logistics.Stowage;
+import interfaces.logistics.UniqueId;
 import interfaces.physics.Acceleration;
 import interfaces.physics.Speed;
 import interfaces.physics.TimeDiff;
@@ -110,21 +118,21 @@ public final class Values {
         return SpeedInMs.valueOf(kmh * KMH_IN_MS);
     }
     //Containerlogistik
-    /*
-     public static BoundingBox boundingBox(Length length, Length width, Length height) {
-     return BoundingBoxImpl.valueOf(length, width, height);
-     }
 
-     public static Stowage containerStowage(int bays, int rows, int tiers, Mass maxMass) {
-     return ContainerStowageImpl.valueOf(bays, rows, tiers, maxMass);
-     }
+    public static BoundingBox boundingBox(Length length, Length width, Length height) {
+        return BoundingBoxImpl.valueOf(length, width, height);
+    }
 
-     public static UniqueId uniqueId(long id) {
-     return UniqueIdImpl.valueOf(id);
-     }
+    public static Name name(String stringName) {
+        return NameImpl.valueOf(stringName);
+    }
 
-     public static Name name(String stringName) {
-     return Name.valueOf(stringName);
-     }
-     */
+    public static UniqueId uniqueId(long id) {
+        return UniqueIdImpl.valueOf(id);
+    }
+
+    public static Stowage containerStowage(int bays, int rows, int tiers, Mass maxMass) {
+        return ContainerStowageImpl.valueOf(bays, rows, tiers, maxMass);
+    }
+
 }
