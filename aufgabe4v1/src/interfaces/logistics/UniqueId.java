@@ -8,7 +8,7 @@ package interfaces.logistics;
  *
  * @author SaCry
  */
-public interface UniqueId extends AdminValue {
-    
+public interface UniqueId extends AdminValue, Comparable<UniqueId> {
+
     long idNumber();
 }

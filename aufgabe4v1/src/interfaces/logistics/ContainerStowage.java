@@ -4,7 +4,6 @@
  */
 package interfaces.logistics;
 
-import interfaces.logistics.Stowage;
 
 /**
  *

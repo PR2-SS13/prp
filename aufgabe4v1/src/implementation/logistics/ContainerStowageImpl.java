@@ -18,7 +18,7 @@ import java.util.Set;
 public class ContainerStowageImpl implements ContainerStowage {
 
     private int bays, rows, tiers;
-    private Mass maxMass;
+    private Mass emptyMass, maxMass;
 
     private ContainerStowageImpl(int bays, int rows, int tiers, Mass maxMass) {
         this.bays = bays;

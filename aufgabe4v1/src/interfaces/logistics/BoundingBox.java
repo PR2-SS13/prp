@@ -13,13 +13,15 @@ import interfaces.physics.Length;
  * eines physikalischen Objektes anzugeben
  *
  */
-public interface BoundingBox extends PhysicsValue {
+public interface BoundingBox extends PhysicsValue, Comparable<BoundingBox> {
 
     Length length();
 
     Length width();
 
     Length height();
+
+    boolean isNull();
 
     boolean fitsInto(BoundingBox boundingBox);
 }

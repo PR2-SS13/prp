@@ -4,7 +4,6 @@
  */
 package interfaces.logistics;
 
-import interfaces.logistics.Stowage;
 import interfaces.logistics.traits.WithForm;
 import interfaces.logistics.traits.WithStowLoc;
 

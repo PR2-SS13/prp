@@ -12,6 +12,20 @@ import interfaces.logistics.StowageLocation;
  */
 public class StowageLocationImpl implements StowageLocation {
 
+    int bay;
+    int row;
+    int tier;
+
+    private StowageLocationImpl(int bay, int row, int tier) {
+        this.bay = bay;
+        this.row = row;
+        this.tier = tier;
+    }
+
+    public static StowageLocationImpl valueOf(int bay, int row, int tier) {
+        return new StowageLocationImpl(bay, row, tier);
+    }
+
     @Override
     public int bay() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -46,4 +46,35 @@ public class BoundingBoxImpl implements BoundingBox {
                 && this.width().m() <= boundingBox.width().m()
                 && this.height().m() <= boundingBox.height().m());
     }
+
+    @Override
+    public boolean isNull() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int compareTo(BoundingBox t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof BoundingBox)) {
+            return false;
+        }
+        return this.compareTo((BoundingBoxImpl) obj) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashDouble(length().m() + (width().m()) * 3 + (height().m() * 7));
+    }
+
+    private int hashDouble(double val) {
+        long longBits = Double.doubleToLongBits(val);
+        return (int) (longBits ^ (longBits >>> 32));
+    }
 }

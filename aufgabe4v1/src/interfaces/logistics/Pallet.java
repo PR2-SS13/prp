@@ -16,5 +16,5 @@ import interfaces.Immutable;
  * Wäre aber natürlich möglich und sinnvoll.
  */
 public interface Pallet extends Immutable,
-        WithStowLoc, WithForm, Comparable<Pallet> {
+        WithStowLoc, Stowage, WithForm, Comparable<Pallet> {
 }

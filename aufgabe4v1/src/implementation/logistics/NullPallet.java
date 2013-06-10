@@ -5,7 +5,6 @@
 package implementation.logistics;
 
 import interfaces.logistics.Pallet;
-import interfaces.logistics.StowageLocation;
 
 /**
  *
@@ -13,19 +12,13 @@ import interfaces.logistics.StowageLocation;
  */
 public class NullPallet extends AbstractPallet {
 
-    @Override
-    public StowageLocation loc() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    static private Pallet singleton = new NullPallet();
+
+    private NullPallet() {
     }
 
-    @Override
-    public void setLocNull() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setLoc(Object stowage, StowageLocation loc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public static Pallet singleton() {
+        return singleton;
     }
 
     @Override
@@ -40,11 +33,6 @@ public class NullPallet extends AbstractPallet {
 
     @Override
     public boolean isOccupied() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int compareTo(Pallet t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -5,10 +5,11 @@
 package interfaces.logistics;
 
 import interfaces.logistics.traits.WithCargo;
+import interfaces.Mutable;
 
 /**
  *
  * @author SaCry
  */
-public interface Stowage<E> extends WithCargo, Bounded3DimStack<E> {
+public interface Stowage<E> extends Mutable, WithCargo, Bounded3DimStack<E> {
 }

@@ -5,7 +5,9 @@
 package implementation.logistics;
 
 import interfaces.logistics.Pallet;
-import interfaces.logistics.StowageLocation;
+import interfaces.logistics.UniqueId;
+import interfaces.physics.Mass;
+import static implementation.Values.*;
 
 /**
  *
@@ -13,19 +15,15 @@ import interfaces.logistics.StowageLocation;
  */
 public class PalletImpl extends AbstractPallet {
 
-    @Override
-    public StowageLocation loc() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private PalletImpl(UniqueId id, Mass mass) {
+        this.id = id;
+        this.mass = mass;
+        this.bBox = boundingBox(lengthInM(3.0), lengthInM(0.7), lengthInM(1.0));
+        setLocNull();
     }
 
-    @Override
-    public void setLocNull() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setLoc(Object stowage, StowageLocation loc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public static Pallet valueOf(UniqueId id, Mass mass) {
+        return new PalletImpl(id, mass);
     }
 
     @Override
@@ -40,11 +38,6 @@ public class PalletImpl extends AbstractPallet {
 
     @Override
     public boolean isOccupied() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int compareTo(Pallet t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
