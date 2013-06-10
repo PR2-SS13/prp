@@ -29,17 +29,14 @@ public class Bounded3DimStackImpl<E extends WithStowLoc> implements Bounded3DimS
         this.parent = parent;
     }
 
-    @Override
     public int bays() {
         return numberOfBays;
     }
 
-    @Override
     public int rows() {
         return numberOfRows;
     }
 
-    @Override
     public int tiers() {
         return numberOfTiers;
     }
