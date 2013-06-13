@@ -77,17 +77,17 @@ public class PalletStowageImpl implements Stowage<Pallet> {
 
     @Override
     public boolean tierIsFull(int bay, int row) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contents.tierIsFull(bay, row);
     }
 
     @Override
     public boolean contains(Object elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contents.contains(elem);
     }
 
     @Override
     public boolean containsAll(Collection<?> coll) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contents.containsAll(coll);
     }
 
     @Override

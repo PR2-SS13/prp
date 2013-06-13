@@ -4,17 +4,11 @@
  */
 package implementation.logistics;
 
-import interfaces.logistics.StowageLocation;
-
 /**
  *
  * @author SaCry
  */
-public class StowageLocationImpl implements StowageLocation {
-
-    int bay;
-    int row;
-    int tier;
+public class StowageLocationImpl extends AbstractLocation {
 
     private StowageLocationImpl(int bay, int row, int tier) {
         this.bay = bay;
@@ -26,24 +20,8 @@ public class StowageLocationImpl implements StowageLocation {
         return new StowageLocationImpl(bay, row, tier);
     }
 
-
-    @Override
-    public int row() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int tier() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     @Override
     public boolean isNull() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int bay() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
 }

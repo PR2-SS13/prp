@@ -4,8 +4,10 @@
  */
 package implementation.logistics;
 
+import static implementation.Values.*;
 import interfaces.logistics.BoundingBox;
 import interfaces.logistics.Pallet;
+import interfaces.logistics.Stowage;
 import interfaces.logistics.StowageLocation;
 import interfaces.logistics.UniqueId;
 import interfaces.physics.Mass;
@@ -20,7 +22,10 @@ public abstract class AbstractPallet implements Pallet {
 
     UniqueId id;
     Mass mass;
+    Mass emptyMass;
     BoundingBox bBox;
+    StowageLocation loc;
+    private Stowage stowage;
 
     @Override
     public UniqueId id() {
@@ -29,91 +34,101 @@ public abstract class AbstractPallet implements Pallet {
 
     @Override
     public StowageLocation loc() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.loc;
     }
 
     @Override
     public void setLocNull() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.stowage = null;
+        this.loc = NULL_LOCATION;
     }
 
     @Override
     public void setLoc(Object stowage, StowageLocation loc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int compareTo(Pallet t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Mass emptyMass() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.stowage = (Stowage) stowage;
+        this.loc = loc;
     }
 
     @Override
     public Mass maxMass() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isFull() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.mass;
     }
 
     @Override
     public void load(int bayNo, int rowNo, Object elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        stowage.load(bayNo, rowNo, elem);
     }
 
     @Override
     public void load(Object elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        stowage.load(elem);
     }
 
     @Override
     public void loadAll(Collection coll) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        stowage.loadAll(coll);
     }
 
     @Override
     public boolean tierIsEmpty(int bay, int row) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return stowage.tierIsEmpty(bay, row);
     }
 
     @Override
     public boolean tierIsFull(int bay, int row) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return stowage.tierIsFull(bay, row);
     }
 
     @Override
     public boolean contains(Object elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return stowage.contains(elem);
     }
 
     @Override
     public boolean containsAll(Collection coll) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return stowage.containsAll(coll);
     }
 
     @Override
     public Object get(StowageLocation loc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Pallet) stowage.get(loc);
     }
 
     @Override
     public Set getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return stowage.getAll();
     }
 
     @Override
     public StowageLocation locationOf(Object elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return stowage.locationOf(elem);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Pallet)) {
+            return false;
+        }
+        if (this.compareTo((Pallet) obj) == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int compareTo(Pallet t) {
+        return this.id().compareTo(t.id());
+    }
+
+    public BoundingBox boundingBox() {
+        return this.bBox;
+    }
+
+    @Override
+    public int hashCode() {
+        return id().hashCode();
     }
 }

@@ -25,6 +25,7 @@ import interfaces.logistics.Container;
 import interfaces.logistics.Name;
 import interfaces.logistics.Pallet;
 import interfaces.logistics.Stowage;
+import interfaces.logistics.StowageLocation;
 import interfaces.logistics.UniqueId;
 import interfaces.physics.Acceleration;
 import interfaces.physics.Speed;
@@ -66,9 +67,10 @@ public final class Values {
     // Null Location 
     public static final Container NULL_CONTAINER = nullContainer();
     public static final Pallet NULL_PALLET = nullPallet();
-
+    public static final StowageLocation NULL_LOCATION = nullLocation();
     // FactoryMethods
     // Length
+
     public static Length lengthInM(double meters) {
         return LengthInM.valueOf(meters);
     }
