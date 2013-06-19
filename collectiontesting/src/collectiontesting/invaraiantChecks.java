@@ -4,9 +4,9 @@
  */
 package collectiontesting;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import static com.google.common.base.Preconditions.*;
+import static collectiontesting.populatingColls.*;
+import java.util.HashMap;
 
 /**
  *
@@ -14,23 +14,12 @@ import java.util.List;
  */
 public class invaraiantChecks {
 
-    
-    public static List<String> interleave(List<String> l1, List<String> l2) {
-        
-        List<String> result = new ArrayList<>();
-        
-        Iterator<String> it2 = l2.iterator();
-        for (Iterator<String> it1 = l1.iterator(); 
-                it1.hasNext() || it2.hasNext();) {
-            
-            if (it1.hasNext())
-                result.add(it1.next());
-            if (it2.hasNext())
-                result.add(it2.next());
-            
-        }
-        return result;
+    public static void main(String[] args) {
+        int i = 2, j = 3;
+        checkArgument(i >= 0, "Argument was %s but expected nonnegative", i);
+        checkArgument(i < j, "Expected i < j, but %s > %s", i, j);
+        checkNotNull(j);
+        System.out.println("Success!");
+        HashMap<?, ?> m = cHmap(cLi("Layla", "the", "Lam"), cLi(1, 2, 3));
     }
-    
-    
 }

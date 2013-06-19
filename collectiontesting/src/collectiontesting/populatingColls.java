@@ -24,10 +24,15 @@ import java.util.TreeSet;
 public class populatingColls {
 
     public static void main(String[] args) {
+        // As Absract
         List<?> l1 = new ArrayList<>(cLi("Layla", "the", "Lam"));
         List<?> l2 = new LinkedList<>(cLi("Layla", "the", "Lam"));
+        // Concrete
+        ArrayList<?> l3 = cLiAl(cLiAl("Layla", 1), cLiAl("the", 2), cLiAl("Lam", 3));
+        // As Abstract
         Set<?> s1 = new HashSet(cLi(1, 2, 3, 4));
         Set<?> s2 = new TreeSet<>(cLi(1, 2, 3, 4));
+        // As Abstract
         Map<?, ?> m1 = cMa(new HashMap<String, Integer>(),
                 cLi("Layla", "the", "Lam"), cLi(5, 4, 3));
         Map<?, ?> m2 = cMa(new HashMap<String, Integer>(),
@@ -49,6 +54,12 @@ public class populatingColls {
         return m;
     }
 
+    // Helpers
+    public static ArrayList cLiAl(Object... elements) {
+        ArrayList<?> al = new ArrayList<>(cLi(elements));
+        return al;
+    }
+
     public static void prLi(Collection<?> coll) {
         for (Object o : coll) {
             System.out.println(o);
@@ -59,5 +70,11 @@ public class populatingColls {
         for (Map.Entry<? extends Object, ? extends Object> o : m.entrySet()) {
             System.out.println(o);
         }
+    }
+
+    public static HashMap<?, ?> cHmap(List<?> keys, List<?> values) {
+        HashMap<?, ?> hm = new HashMap<>(cMa(new HashMap<String, Integer>(),
+                keys, values));
+        return hm;
     }
 }
