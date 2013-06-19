@@ -39,6 +39,7 @@ public class populatingColls {
                 cLi("Layla", "the", "Lam"), cLi(5, 4));
         Map<?, ?> m3 = cMa(new TreeMap<String, Integer>(),
                 cLi("Layla", "the"), cLi(5, 4, 3));
+        prM(m3);
     }
 
     public static List cLi(Object... elements) {
@@ -56,8 +57,7 @@ public class populatingColls {
 
     // Helpers
     public static ArrayList cLiAl(Object... elements) {
-        ArrayList<?> al = new ArrayList<>(cLi(elements));
-        return al;
+        return new ArrayList<>(cLi(elements));
     }
 
     public static void prLi(Collection<?> coll) {
@@ -66,15 +66,13 @@ public class populatingColls {
         }
     }
 
-    public static void prM(Map<? extends Object, ? extends Object> m) {
-        for (Map.Entry<? extends Object, ? extends Object> o : m.entrySet()) {
+    public static void prM(Map m) {
+        for (Object o : m.entrySet()) {
             System.out.println(o);
         }
     }
 
     public static HashMap<?, ?> cHmap(List<?> keys, List<?> values) {
-        HashMap<?, ?> hm = new HashMap<>(cMa(new HashMap<String, Integer>(),
-                keys, values));
-        return hm;
+        return new HashMap<>(cMa(new HashMap<>(), keys, values));
     }
 }
