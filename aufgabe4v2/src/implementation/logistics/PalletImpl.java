@@ -19,7 +19,7 @@ public class PalletImpl extends AbstractPallet {
         this.id = id;
         this.mass = mass;
         this.bBox = boundingBox(lengthInM(3.0), lengthInM(0.7), lengthInM(1.0));
-        //setLocNull();
+        setLocNull();
     }
 
     public static Pallet valueOf(UniqueId id, Mass mass) {
@@ -40,4 +40,5 @@ public class PalletImpl extends AbstractPallet {
     public boolean isOccupied() {
         return true;
     }
+
 }

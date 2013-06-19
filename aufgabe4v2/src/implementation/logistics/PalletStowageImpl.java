@@ -18,90 +18,90 @@ import java.util.Set;
  * @author SaCry
  */
 public class PalletStowageImpl implements Stowage<Pallet> {
-
+    
     Bounded3DimStackImpl<Pallet> contents;
     public static Pallet nullContent = NULL_PALLET;
     private BoundingBox bBox;
     private Mass emptyMass, maxMass;
-
+    
     private PalletStowageImpl(int bays, int rows, int tiers, Mass maxMass) {
         this.bBox = boundingBox(lengthInFt(20), lengthInFt(8), lengthInFt(8));
         this.contents = new Bounded3DimStackImpl<>(bays, rows, tiers, nullContent, this);
         this.emptyMass = massInKg(0.0);
         this.maxMass = maxMass;
     }
-
+    
     public static PalletStowageImpl valueOf(int bays, int rows, int tiers, Mass maxMass) {
         return new PalletStowageImpl(bays, rows, tiers, maxMass);
     }
-
+    
     @Override
     public Mass emptyMass() {
         return this.emptyMass;
     }
-
+    
     @Override
     public Mass maxMass() {
         return this.maxMass;
     }
-
+    
     @Override
     public boolean isEmpty() {
         return contents.isEmpty();
     }
-
+    
     @Override
     public boolean isFull() {
         return contents.isFull();
     }
-
+    
     @Override
     public void load(int bayNo, int rowNo, Pallet elem) {
         contents.load(bayNo, rowNo, elem);
     }
-
+    
     @Override
     public void load(Pallet elem) {
         contents.load(elem);
     }
-
+    
     @Override
     public void loadAll(Collection<Pallet> coll) {
         contents.loadAll(coll);
     }
-
+    
     @Override
     public boolean tierIsEmpty(int bay, int row) {
         return contents.tierIsEmpty(bay, row);
     }
-
+    
     @Override
     public boolean tierIsFull(int bay, int row) {
         return contents.tierIsFull(bay, row);
     }
-
+    
     @Override
     public boolean contains(Object elem) {
         return contents.contains(elem);
     }
-
+    
     @Override
     public boolean containsAll(Collection<?> coll) {
         return contents.containsAll(coll);
     }
-
+    
     @Override
     public Pallet get(StowageLocation loc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Pallet) contents.get(loc);
     }
-
+    
     @Override
     public Set<Pallet> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contents.getAll();
     }
-
+    
     @Override
     public StowageLocation locationOf(Pallet elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contents.locationOf(elem);
     }
 }

@@ -25,7 +25,6 @@ public abstract class AbstractContainer implements Container {
     BoundingBox bBox;
     Mass maxMass;
     Mass emptyMass;
-    private Stowage stowage;
     private StowageLocation loc;
 
     @Override
@@ -95,12 +94,12 @@ public abstract class AbstractContainer implements Container {
 
     @Override
     public void setLocNull() {
-        this.stowage = null;
+        this.pStowage = null;
     }
 
     @Override
     public void setLoc(Object stowage, StowageLocation loc) {
-        this.stowage = (Stowage) stowage;
+        this.pStowage = (Stowage) stowage;
         this.loc = loc;
     }
 

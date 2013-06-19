@@ -28,6 +28,11 @@ public abstract class AbstractPallet implements Pallet {
     private Stowage stowage;
 
     @Override
+    public Mass emptyMass() {
+        return this.emptyMass;
+    }
+
+    @Override
     public UniqueId id() {
         return this.id;
     }
@@ -35,6 +40,11 @@ public abstract class AbstractPallet implements Pallet {
     @Override
     public StowageLocation loc() {
         return this.loc;
+    }
+
+    @Override
+    public boolean isFull() {
+        return stowage.isFull();
     }
 
     @Override
@@ -123,12 +133,13 @@ public abstract class AbstractPallet implements Pallet {
         return this.id().compareTo(t.id());
     }
 
-    public BoundingBox boundingBox() {
-        return this.bBox;
-    }
-
     @Override
     public int hashCode() {
         return id().hashCode();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return stowage.isEmpty();
     }
 }

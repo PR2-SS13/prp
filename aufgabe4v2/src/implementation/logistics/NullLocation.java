@@ -4,24 +4,41 @@
  */
 package implementation.logistics;
 
+import interfaces.logistics.StowageLocation;
+
 /**
  *
  * @author sacry
  */
 public class NullLocation extends AbstractLocation {
 
-    private NullLocation(int bay, int row, int tier) {
-        this.bay = bay;
-        this.row = row;
-        this.tier = tier;
+    static StowageLocation singleton = new NullLocation();
+
+    private NullLocation() {
     }
 
-    public static NullLocation valueOf(int bay, int row, int tier) {
-        return new NullLocation(bay, row, tier);
+    public static StowageLocation singleton() {
+        return singleton;
     }
 
     @Override
     public boolean isNull() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof NullLocation)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return -1;
     }
 }

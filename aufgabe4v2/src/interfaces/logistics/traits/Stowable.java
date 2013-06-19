@@ -8,11 +8,9 @@ import interfaces.logistics.StowageLocation;
 
 /**
  *
- * @author SaCry
+ * @author sacry
  */
-public interface WithStowLoc<S> extends Stowable {
+public interface Stowable {
 
-    void setLocNull();
-
-    void setLoc(S stowage, StowageLocation loc);
+    StowageLocation loc();
 }

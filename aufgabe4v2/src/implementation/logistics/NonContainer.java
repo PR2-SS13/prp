@@ -21,7 +21,7 @@ public class NonContainer extends AbstractContainer {
         pStowage = palletStowage(1, 9, 3, ZERO_MASS);
         emptyMass = massInKg(0.0);
         maxMass = massInKg(0.0);
-        //setLocNull();
+        setLocNull();
     }
 
     public static Container singleton() {

@@ -29,7 +29,7 @@ public class UniqueIdImpl implements UniqueId {
 
     @Override
     public int compareTo(UniqueId t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return Long.compare(this.idNumber(), t.idNumber());
     }
 
     @Override

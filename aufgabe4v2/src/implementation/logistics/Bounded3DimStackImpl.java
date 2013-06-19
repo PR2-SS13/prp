@@ -4,19 +4,25 @@
  */
 package implementation.logistics;
 
-import interfaces.logistics.traits.WithStowLoc;
+import static implementation.Values.*;
 import interfaces.logistics.Bounded3DimStack;
 import interfaces.logistics.Stowage;
 import interfaces.logistics.StowageLocation;
+import interfaces.logistics.traits.Stowable;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
  *
  * @author SaCry
  */
-public class Bounded3DimStackImpl<E extends WithStowLoc> implements Bounded3DimStack<E> {
+public class Bounded3DimStackImpl<E extends Stowable> implements Bounded3DimStack<E> {
 
+    Map<StowageLocation, E> contents = new HashMap<>();
     int numberOfBays, numberOfRows, numberOfTiers;
     Stowage nullObj;
     Stowage parent;
@@ -41,64 +47,117 @@ public class Bounded3DimStackImpl<E extends WithStowLoc> implements Bounded3DimS
         return numberOfTiers;
     }
 
-
     @Override
     public void load(E elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        contents.put(elem.loc(), elem);
+        elem.setLoc(parent, elem.loc());
     }
 
     @Override
     public void loadAll(Collection<E> coll) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (E e : coll) {
+            this.load(e);
+        }
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contents.isEmpty();
     }
 
     @Override
     public boolean isFull() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (contents.size() >= (numberOfTiers * numberOfRows * numberOfBays));
     }
 
     @Override
     public boolean tierIsEmpty(int bay, int row) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StowageLocation l;
+        for (int z = 0; z < numberOfTiers; z++) {
+            l = stowageLocation(bay, row, z);
+            if (!this.get(l).equals(this.nullObj)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean tierIsFull(int bay, int row) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StowageLocation l;
+        for (int z = 0; z < numberOfTiers; z++) {
+            l = stowageLocation(bay, row, z);
+            if (this.get(l).equals(this.nullObj)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean contains(Object elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Map.Entry<StowageLocation, E> entry : contents.entrySet()) {
+
+            if (entry.getValue().equals(elem)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
     public boolean containsAll(Collection<?> coll) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Iterator i = coll.iterator(); i.hasNext();) {
+            E e = (E) i.next();
+            if (!this.contains(e)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public E get(StowageLocation loc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Map.Entry<StowageLocation, E> entry : contents.entrySet()) {
+            if (entry.getKey().equals(loc)) {
+                return entry.getValue();
+            }
+        }
+        return (E) this.nullObj;
     }
 
     @Override
     public Set<E> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Set<E> result = new HashSet<>();
+        for (Map.Entry<StowageLocation, E> entry : contents.entrySet()) {
+            result.add(entry.getValue());
+        }
+        return result;
     }
 
     @Override
     public StowageLocation locationOf(E elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Map.Entry<StowageLocation, E> entry : contents.entrySet()) {
+            if (entry.getValue().equals(elem)) {
+                return entry.getKey();
+            }
+        }
+        return NULL_LOCATION;
     }
 
     @Override
     public void load(int bayNo, int rowNo, E elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.tierIsFull(bayNo, rowNo)) {
+            throw new RuntimeException("Stack full!");
+        }
+        StowageLocation l;
+        for (int z = 0; z < numberOfTiers; z++) {
+            l = stowageLocation(bayNo, rowNo, z);
+            if (this.get(l).equals(this.nullObj)) {
+                this.load(elem);
+                return;
+            }
+        }
     }
 }

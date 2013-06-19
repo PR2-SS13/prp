@@ -5,14 +5,14 @@
 package logistictest;
 
 import static implementation.Values.*;
-import interfaces.logistics.BoundingBox;
-import interfaces.logistics.Name;
-import interfaces.logistics.UniqueId;
-import interfaces.physics.Length;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import implementation.logistics.Bounded3DimStackImpl;
+import implementation.logistics.ContainerImpl;
+import interfaces.logistics.Container;
+import interfaces.logistics.Stowage;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -26,31 +26,26 @@ public class CompoundTest {
     }
 
     @Test
-    public void testBoundingBox() {
-        Length l1 = lengthInM(5.0);
-        Length h1 = lengthInM(10.0);
-        Length w1 = lengthInM(20.0);
-        Length l2 = lengthInM(5.0);
-        Length h2 = lengthInM(8.0);
-        Length w2 = lengthInM(15.0);
-        BoundingBox b1 = boundingBox(l1, h1, w1);
-        BoundingBox b2 = boundingBox(l2, h2, w2);
-        assertEquals(false, b1.fitsInto(b2));
-        assertEquals(true, b2.fitsInto(b1));
-        assertEquals(true, b2.fitsInto(b2));
-    }
-
-    @Test
-    public void testName() {
-        Name n = name("Queen Marry V");
-        assertEquals(true, n.nameString().equals("Queen Marry V"));
-        assertEquals(false, n.nameString().equals("Queen Marry"));
-    }
-
-    @Test
-    public void testUniqueId() {
-        UniqueId n = uniqueId(100);
-        assertEquals(true, n.idNumber() == 100);
-        assertEquals(false, n.idNumber() == 99);
+    public void testCompound() {
+        Container container = container(uniqueId(10));
+        container.setLoc(palletStowage(1, 1, 1, ZERO_MASS), stowageLocation(1, 1, 1));
+        Bounded3DimStackImpl<Container> stack = new Bounded3DimStackImpl<>(1, 1, 1, NULL_CONTAINER, null);
+        assertEquals(true, stack.isEmpty());
+        stack.load(container);
+        assertEquals(true, stack.isFull());
+        Bounded3DimStackImpl<Container> stack2 = new Bounded3DimStackImpl<>(1, 1, 2, NULL_CONTAINER, null);
+        ArrayList<Container> al = new ArrayList<>();
+        Container container1 = container(uniqueId(4));
+        container1.setLoc(palletStowage(1, 1, 1, massInKg(10)), stowageLocation(1, 1, 1));
+        al.add(container1);
+        Container container2 = container(uniqueId(5));
+        container2.setLoc(palletStowage(2, 2, 2, massInKg(10)), stowageLocation(1, 1, 2));
+        al.add(container2);
+        assertEquals(true, stack2.isEmpty());
+        stack2.loadAll(al);
+        assertEquals(true, stack2.isFull());
+        Set<?> result = new HashSet<>(al);
+        assertEquals(result, stack2.getAll());
+        assertEquals(container1.hashCode(), stack2.get(stowageLocation(1, 1, 1)).hashCode());
     }
 }

@@ -49,12 +49,21 @@ public class BoundingBoxImpl implements BoundingBox {
 
     @Override
     public boolean isNull() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
 
     @Override
     public int compareTo(BoundingBox t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.height().m() == t.height().m()
+                && this.width().m() == t.width().m()
+                && this.length().m() == t.length().m()) {
+            return 0;
+        }
+        if (this.height().m() * this.width().m() * this.length().m()
+                < t.height().m() * t.width().m() * t.length().m()) {
+            return -1;
+        }
+        return 1;
     }
 
     @Override

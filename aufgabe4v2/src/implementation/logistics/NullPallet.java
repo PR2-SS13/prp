@@ -19,7 +19,7 @@ public class NullPallet extends AbstractPallet {
         this.id = uniqueId(0);
         this.bBox = boundingBox(lengthInM(3.0), lengthInM(0.7), lengthInM(1.0));
         this.mass = ZERO_MASS;
-        //setLocNull();
+        setLocNull();
     }
 
     public static Pallet singleton() {

@@ -4,8 +4,11 @@
  */
 package implementation.logistics;
 
+import static implementation.Values.*;
+import interfaces.logistics.BoundingBox;
 import interfaces.logistics.Container;
 import interfaces.logistics.ContainerStowage;
+import interfaces.logistics.Stowage;
 import interfaces.logistics.StowageLocation;
 import interfaces.physics.Mass;
 import java.util.Collection;
@@ -17,89 +20,94 @@ import java.util.Set;
  */
 public class ContainerStowageImpl implements ContainerStowage {
 
-    private int bays, rows, tiers;
+    Bounded3DimStackImpl<Container> contents;
+    public static Container nullContent = NULL_CONTAINER;
+    private BoundingBox bBox;
     private Mass emptyMass, maxMass;
 
     private ContainerStowageImpl(int bays, int rows, int tiers, Mass maxMass) {
-        this.bays = bays;
-        this.rows = rows;
-        this.tiers = tiers;
+        this.bBox = boundingBox(lengthInFt(20).mul(bays), lengthInFt(8).mul(rows), lengthInFt(8).mul(tiers));
+        this.contents = new Bounded3DimStackImpl<>(bays, rows, tiers, nullContent, this);
+        this.emptyMass = massInKg(0.0);
         this.maxMass = maxMass;
     }
 
-    public static ContainerStowageImpl valueOf(int bays, int rows, int tiers, Mass maxMass) {
+    public static Stowage valueOf(int bays, int rows, int tiers, Mass maxMass) {
         return new ContainerStowageImpl(bays, rows, tiers, maxMass);
     }
 
     @Override
-    public Mass emptyMass() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Mass maxMass() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
-
-    @Override
-    public boolean isFull() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void load(int bayNo, int rowNo, Container elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        contents.load(bayNo, rowNo, elem);
     }
 
     @Override
     public void load(Container elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        contents.load(elem);
     }
 
     @Override
     public void loadAll(Collection<Container> coll) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean tierIsEmpty(int bay, int row) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean tierIsFull(int bay, int row) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean contains(Object elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        contents.loadAll(coll);
     }
 
     @Override
     public boolean containsAll(Collection<?> coll) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contents.containsAll(coll);
     }
 
     @Override
     public Container get(StowageLocation loc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Container) contents.get(loc);
     }
 
     @Override
     public Set<Container> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contents.getAll();
     }
 
     @Override
     public StowageLocation locationOf(Container elem) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contents.locationOf(elem);
+    }
+
+    @Override
+    public boolean tierIsEmpty(int bay, int row) {
+        return contents.tierIsEmpty(bay, row);
+    }
+
+    @Override
+    public boolean tierIsFull(int bay, int row) {
+        return contents.tierIsFull(bay, row);
+    }
+
+    @Override
+    public boolean contains(Object elem) {
+
+        if (!(elem instanceof Container)) {
+            return false;
+        }
+        return contents.contains(elem);
+
+    }
+
+    @Override
+    public Mass emptyMass() {
+        return this.emptyMass;
+    }
+
+    @Override
+    public Mass maxMass() {
+        return this.maxMass;
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contents.isEmpty();
+    }
+
+    @Override
+    public boolean isFull() {
+        return contents.isFull();
     }
 }

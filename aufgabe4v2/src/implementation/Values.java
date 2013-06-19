@@ -9,9 +9,11 @@ import implementation.logistics.ContainerImpl;
 import implementation.logistics.ContainerStowageImpl;
 import implementation.logistics.NameImpl;
 import implementation.logistics.NullContainer;
+import implementation.logistics.NullLocation;
 import implementation.logistics.NullPallet;
 import implementation.logistics.PalletImpl;
 import implementation.logistics.PalletStowageImpl;
+import implementation.logistics.StowageLocationImpl;
 import implementation.logistics.UniqueIdImpl;
 import implementation.physics.AccelerationInMs2;
 import implementation.physics.TimeDiffInS;
@@ -158,6 +160,14 @@ public final class Values {
         return NullContainer.singleton();
     }
 
+    public static StowageLocation nullLocation() {
+        return NullLocation.singleton();
+    }
+    
+    public static StowageLocation stowageLocation(int bays, int rows, int tiers) {
+        return StowageLocationImpl.valueOf(bays, rows, tiers);
+    }
+
     public static Pallet pallet(UniqueId id, Mass m) {
         return PalletImpl.valueOf(id, m);
     }
@@ -165,4 +175,5 @@ public final class Values {
     public static Pallet nullPallet() {
         return NullPallet.singleton();
     }
+    
 }

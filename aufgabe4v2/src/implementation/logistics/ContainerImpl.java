@@ -19,7 +19,7 @@ public class ContainerImpl extends AbstractContainer {
         emptyMass = massInKg(100.0);
         maxMass = massInKg(10000.0);
         pStowage = palletStowage(1, 9, 3, maxMass().sub(emptyMass));
-        //setLocNull();
+        setLocNull();
     }
 
     public static Container valueOf(UniqueId id) {
