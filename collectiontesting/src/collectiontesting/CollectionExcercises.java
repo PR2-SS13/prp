@@ -7,11 +7,13 @@ package collectiontesting;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
+import static com.google.common.base.Preconditions.*;
+import java.util.Collections;
 
 /**
  *
@@ -20,7 +22,7 @@ import java.util.ListIterator;
 public class CollectionExcercises {
 
     public static void main(String[] args) {
-        
+
         Collection<Object> coll1 = new ArrayList<Object>(Arrays.asList("a", "b"));
         Collection<Object> coll2 = new ArrayList<Object>(Arrays.asList("a", "b"));
         Collection<Object> coll3 = new LinkedList<Object>(Arrays.asList("a", "b"));
@@ -30,15 +32,17 @@ public class CollectionExcercises {
         coll3.add(coll4);
         System.out.println(maxDebth(coll1));
 
-        ArrayList<Object> l1 = new ArrayList<Object>(Arrays.asList("a", "b"));
-        ArrayList<Object> l2 = new ArrayList<Object>(Arrays.asList("c", "d"));
-        ArrayList<Object> l3 = new ArrayList<Object>(Arrays.asList("e", "f"));
-        ArrayList<Object> l4 = new ArrayList<Object>(Arrays.asList("g", "h"));
-        l2.add(l3);
-        l1.add(l2);
-        l1.add(l4);
-        System.out.println(deepReverse(l1));
-        System.out.println(l1);
+        List<Object> l1 = new ArrayList<Object>(Arrays.asList("e", "f"));
+        List<Object> l2 = new ArrayList<>(Arrays.asList("c", "d", l1));
+        List<Object> l3 = new ArrayList<Object>(Arrays.asList("g", "h"));
+        Set<Object> s1 = new HashSet<>(Arrays.asList("x", "y", l3, l2));
+        List<Object> l4 = new LinkedList<>(Arrays.asList("5", "7", s1));
+        List<Object> l5 = new LinkedList<>(Arrays.asList("a", "b", l1, l2, s1, l4));
+
+        System.out.println(l5);
+        System.out.println(deepReverse(l5));
+        mutableReverse(l5);
+        System.out.println(l5);
     }
 
     public static int maxDebth(Collection<?> coll) {
@@ -51,13 +55,28 @@ public class CollectionExcercises {
         return max;
     }
 
+    // Mutable is not cast to any concrete collections subclass and stays as is...
+    public static void mutableReverse(Collection<Object> coll) {
+        if (coll instanceof List) {
+            Collections.reverse((List<Object>) coll);
+        }
+        for (Object o : coll) {
+            if (o instanceof List) {
+                mutableReverse((List<Object>) o);
+            } else if (o instanceof Set) {
+                mutableReverse((Set<Object>) o);
+            }
+        }
+    }
+
+    // On List, doesn't touch any Set types..
     public static List<Object> deepReverse(List<Object> list) {
         List<Object> al = new ArrayList<>();
-        for (ListIterator iterator = list.listIterator(list.size()); 
+        for (ListIterator iterator = list.listIterator(list.size());
                 iterator.hasPrevious();) {
             Object listElement = iterator.previous();
-            if(listElement instanceof List){
-                al.add(deepReverse((List<Object>)listElement));
+            if (listElement instanceof List) {
+                al.add(deepReverse((List<Object>) listElement));
             } else {
                 al.add(listElement);
             }
