@@ -39,10 +39,35 @@ public class CollectionExcercises {
         List<Object> l4 = new LinkedList<>(Arrays.asList("5", "7", s1));
         List<Object> l5 = new LinkedList<>(Arrays.asList("a", "b", l1, l2, s1, l4));
 
-        System.out.println(l5);
-        System.out.println(deepReverse(l5));
-        mutableReverse(l5);
-        System.out.println(l5);
+
+        Set<Object> s3 = new HashSet<Object>(Arrays.asList("x", "y", "z", "a", "b"));
+        Set<Object> s4 = new HashSet<Object>(Arrays.asList("x", "y", "z", "c", "d"));
+        System.out.println("union: " + union(s3, s4));
+        System.out.println("intersection: " + intersection(s3, s4));
+        System.out.println("difference: " + difference(s3, s4));
+        System.out.println("asymdiff: " + asymdiff(s3, s4));
+    }
+
+    public static Set<Object> union(Set<Object> s1, Set<Object> s2) {
+        Set<Object> s3 = new HashSet<>(s1);
+        s3.addAll(s2);
+        return s3;
+    }
+
+    public static Set<Object> intersection(Set<Object> s1, Set<Object> s2) {
+        Set<Object> s3 = new HashSet<>(s1);
+        s3.retainAll(s2);
+        return s3;
+    }
+
+    public static Set<Object> difference(Set<Object> s1, Set<Object> s2) {
+        Set<Object> s3 = new HashSet<>(s1);
+        s3.removeAll(s2);
+        return s3;
+    }
+
+    public static Set<Object> asymdiff(Set<Object> s1, Set<Object> s2) {
+        return difference(union(s1, s2), intersection(s1, s2));
     }
 
     public static int maxDebth(Collection<?> coll) {
@@ -53,34 +78,5 @@ public class CollectionExcercises {
             }
         }
         return max;
-    }
-
-    // Mutable is not cast to any concrete collections subclass and stays as is...
-    public static void mutableReverse(Collection<Object> coll) {
-        if (coll instanceof List) {
-            Collections.reverse((List<Object>) coll);
-        }
-        for (Object o : coll) {
-            if (o instanceof List) {
-                mutableReverse((List<Object>) o);
-            } else if (o instanceof Set) {
-                mutableReverse((Set<Object>) o);
-            }
-        }
-    }
-
-    // On List, doesn't touch any Set types..
-    public static List<Object> deepReverse(List<Object> list) {
-        List<Object> al = new ArrayList<>();
-        for (ListIterator iterator = list.listIterator(list.size());
-                iterator.hasPrevious();) {
-            Object listElement = iterator.previous();
-            if (listElement instanceof List) {
-                al.add(deepReverse((List<Object>) listElement));
-            } else {
-                al.add(listElement);
-            }
-        }
-        return al;
     }
 }
