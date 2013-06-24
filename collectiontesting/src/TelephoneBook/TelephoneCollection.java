@@ -10,11 +10,11 @@ import java.util.HashMap;
  *
  * @author sacry
  */
-public class AbstractBook {
+public class TelephoneCollection {
 
     private HashMap<String, Telephone> countries = new HashMap<>();
 
-    public AbstractBook() {
+    public TelephoneCollection() {
     }
 
     public void add(Telephone t) {

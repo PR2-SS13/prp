@@ -12,7 +12,7 @@ public class main {
 
     public static void main(String[] args) {
         
-        AbstractBook ab = new AbstractBook();
+        TelephoneCollection ab = new TelephoneCollection();
         
         Telephone t1 = new Telephone("Germany");
         ab.add(t1);
