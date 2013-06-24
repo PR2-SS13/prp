@@ -62,7 +62,7 @@ public class klausur1 {
 
     public static int compareCharList(List<Character> l1, List<Character> l2) {
         checkNotNull(l1, l2);
-        Iterator<Character> i1 = l2.iterator();
+        Iterator<Character> i1 = l1.iterator();
         Iterator<Character> i2 = l2.iterator();
         while (i1.hasNext() && i2.hasNext()) {
             char c1 = i1.next(), c2 = i2.next();
