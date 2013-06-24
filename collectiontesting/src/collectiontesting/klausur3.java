@@ -62,12 +62,11 @@ public class klausur3 {
     public static Set<String> symmDiff(Set<String> s1, Set<String> s2) {
         checkNotNull(s1, s2);
         Set<String> intersection = new HashSet<>(s1);
-        Set<String> union = new HashSet<>(s1);
+        Set<String> result = new HashSet<>(s1);
         intersection.retainAll(s2);
-        union.addAll(s2);
-        Set<String> difference = new HashSet<>(union);
-        difference.removeAll(intersection);
-        return difference;
+        result.addAll(s2);
+        result.removeAll(intersection);
+        return result;
     }
 
     public static List<List<String>> transposeList(List<List<String>> l) {
