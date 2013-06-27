@@ -49,7 +49,8 @@ public class klausur4 {
         checkNotNull(map1, map2);
         Map<String, Integer> freqMap = new HashMap<>(map1);
         for (String s : map2.keySet()) {
-            freqMap.put(s, freqMap.containsKey(s) ? freqMap.get(s) + map2.get(s) : map2.get(s));
+            int m2val = map2.get(s);
+            freqMap.put(s, freqMap.containsKey(s) ? freqMap.get(s) + m2val : m2val);
         }
         return freqMap;
     }

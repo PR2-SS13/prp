@@ -21,7 +21,7 @@ public class PredicateMain {
     public static void main(String[] args) {
 
         List<Integer> lfilter;
-        lfilter = filter(nList(5,6,7,8,9,10), new Predicate<Integer>() {
+        lfilter = filter(nList(5, 6, 7, 8, 9, 10), new Predicate<Integer>() {
             @Override
             public boolean test(Integer t) {
                 return t > 5 && t < 10;
@@ -31,7 +31,7 @@ public class PredicateMain {
         System.out.println("filter (t > 5 && t < 10): " + lfilter);
 
         List<List<String>> lpartition;
-        lpartition = partition(nList("Hello", "You", "Fucked", "Up", "World", "!"), 
+        lpartition = partition(nList("Hello", "You", "Fucked", "Up", "World", "!"),
                 new Predicate<String>() {
             @Override
             public boolean test(String t) {
@@ -42,7 +42,7 @@ public class PredicateMain {
         System.out.println("partition (List<List<String>>): " + lpartition);
 
         boolean lany;
-        lany = any(nList("Hello", "You", "Fucked", "Up", "World", "!"), 
+        lany = any(nList("Hello", "You", "Fucked", "Up", "World", "!"),
                 new Predicate<String>() {
             @Override
             public boolean test(String t) {
@@ -53,7 +53,7 @@ public class PredicateMain {
         System.out.println("any (str.length == 3): " + lany);
 
         boolean lall;
-        lall = all(nList("Hello", "You", "Fucked", "Up", "World", "!"), 
+        lall = all(nList("Hello", "You", "Fucked", "Up", "World", "!"),
                 new Predicate<String>() {
             @Override
             public boolean test(String t) {
@@ -64,7 +64,7 @@ public class PredicateMain {
         System.out.println("all (str.length == 3): " + lall);
 
         int firstIndex;
-        firstIndex = firstIndexFor(nList("Hello", "You", "Fucked", "Up", "World", "!"), 
+        firstIndex = firstIndexFor(nList("Hello", "You", "Fucked", "Up", "World", "!"),
                 new Predicate<String>() {
             @Override
             public boolean test(String t) {
