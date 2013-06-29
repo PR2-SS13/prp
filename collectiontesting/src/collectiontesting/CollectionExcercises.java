@@ -47,7 +47,7 @@ public class CollectionExcercises {
         System.out.println("difference: " + difference(s3, s4));
         System.out.println("asymdiff: " + asymdiff(s3, s4));
 
-        List<? extends Comparable> l = new ArrayList<>(asList(5, 4, 3, 2, 1));
+        List<?> l = new ArrayList<>(asList(5, 4, 3, 2, 1));
         List<Integer> al = new ArrayList<>(asList(5, 4, 3, 2, 1, 2, 3, 4));
         mysort(al);
         System.out.println(mysort(al));
@@ -80,35 +80,35 @@ public class CollectionExcercises {
         System.out.println(sameInMap(m1, m2));
         System.out.println(sameInKeyMap(m1, m2));
     }
-    
-    public static Map<Object, Object> sameInKeyMap(Map<Object, Object> m1, Map<Object, Object> m2) {
-        Map<Object, Object> m3 = new HashMap<>();
-        for (Object o : m2.keySet()) {
-            if (m1.containsKey(o)) {
-                m3.put(o, m1.get(o));
+
+    public static <K, V> Map<K, V> sameInKeyMap(Map<K, V> m1, Map<K, V> m2) {
+        Map<K, V> m3 = new HashMap<>();
+        for (K key : m2.keySet()) {
+            if (m1.containsKey(key)) {
+                m3.put(key, m1.get(key));
             }
         }
         return m3;
     }
 
-    public static Map<Object, Object> sameInMap(Map<Object, Object> m1, Map<Object, Object> m2) {
-        Map<Object, Object> m3 = new HashMap<>();
-        for (Object o : m2.keySet()) {
-            if (m1.containsKey(o) && m1.get(o) == m2.get(o)) {
-                m3.put(o, m1.get(o));
+    public static <K, V> Map<K, V> sameInMap(Map<K, V> m1, Map<K, V> m2) {
+        Map<K, V> m3 = new HashMap<>();
+        for (K key : m2.keySet()) {
+            if (m1.containsKey(key) && m1.get(key) == m2.get(key)) {
+                m3.put(key, m1.get(key));
             }
         }
         return m3;
     }
 
-    public static List<Object> splitInTwoReverse(List<Object> l) {
+    public static <T> List<T> splitInTwoReverse(List<T> l) {
         return reverseList(splitInTwo(l));
     }
 
-    public static List<Object> splitInTwo(List<Object> l) {
-        List<Object> l2 = new ArrayList<>();
-        l2.add(l.subList(0, l.size() / 2));
-        l2.add(l.subList(l.size() / 2, l.size()));
+    public static <T> List<T> splitInTwo(List<T> l) {
+        List<T> l2 = new ArrayList<>();
+        l2.addAll(l.subList(0, l.size() / 2));
+        l2.addAll(l.subList(l.size() / 2, l.size()));
         return l2;
     }
 
@@ -120,8 +120,8 @@ public class CollectionExcercises {
         return l3;
     }
 
-    public static List<Object> reverseList(List<Object> l) {
-        List<Object> l2 = new ArrayList<>(l);
+    public static <T> List<T> reverseList(List<T> l) {
+        List<T> l2 = new ArrayList<>(l);
         Collections.reverse(l2);
         return l2;
     }

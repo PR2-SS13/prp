@@ -11,4 +11,5 @@ package HigherOrderFunctions;
 public interface ReduceFunction<F, T> {
 
     T apply(T a, F b);
+
 }

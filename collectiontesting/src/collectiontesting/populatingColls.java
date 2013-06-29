@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -29,52 +28,40 @@ public class populatingColls {
         List<?> l1 = new ArrayList<>(cLi("Layla", "the", "Lam"));
         List<?> l2 = new LinkedList<>(cLi("Layla", "the", "Lam"));
         // Concrete
-        ArrayList<?> l3 = cLiAl(cLiAl("Layla", 1), cLiAl("the", 2), cLiAl("Lam", 3));
+        List<?> l3 = cLi(cLi("Layla", 1), cLi("the", 2), cLi("Lam", 3));
         // As Abstract
         Set<?> s1 = new HashSet(cLi(1, 2, 3, 4));
         Set<?> s2 = new TreeSet<>(cLi(1, 2, 3, 4));
         // As Abstract
-        Map<?, ?> m1 = cMa(new HashMap<String, Integer>(),
-                cLi("Layla", "the", "Lam"), cLi(5, 4, 3));
-        Map<?, ?> m2 = cMa(new HashMap<String, Integer>(),
-                cLi("Layla", "the", "Lam"), cLi(5, 4));
-        Map<?, ?> m3 = cMa(new TreeMap<String, Integer>(),
-                cLi("Layla", "the"), cLi(5, 4, 3));
-        prM(m3);
-        
+        Map<?, ?> m1 = cMap(cLi("Layla", "the"), cLi(5, 4, 3));
+        prM(m1);
+
     }
 
-    public static List cLi(Object... elements) {
-        return Arrays.asList(elements);
-    }
-
-    public static Map<?, ?> cMa(Map m, List<?> keys, List<?> values) {
-        Iterator itval = values.iterator();
-        for (Iterator<?> itkey = keys.iterator();
-                itkey.hasNext() && itval.hasNext();) {
+    public static <K, V> Map<K, V> cMap(List<K> keys, List<V> values) {
+        Map<K, V> m = new HashMap<>();
+        Iterator<K> itkey = keys.iterator();
+        Iterator<V> itval = values.iterator();
+        while (itkey.hasNext() && itval.hasNext()) {
             m.put(itkey.next(), itval.next());
         }
         return m;
     }
 
-    // Helpers
-    public static ArrayList cLiAl(Object... elements) {
-        return new ArrayList<>(cLi(elements));
+    public static <T> List cLi(T... elements) {
+        return Arrays.asList(elements);
     }
 
-    public static void prLi(Collection<?> coll) {
-        for (Object o : coll) {
-            System.out.println(o);
+    // Printers
+    public static <T> void prLi(Collection<T> coll) {
+        for (T t : coll) {
+            System.out.println(t);
         }
     }
 
-    public static void prM(Map m) {
-        for (Object o : m.entrySet()) {
-            System.out.println(o);
+    public static <K, V> void prM(Map<K, V> m) {
+        for (Map.Entry<K, V> entry : m.entrySet()) {
+            System.out.println(entry);
         }
-    }
-
-    public static HashMap<?, ?> cHmap(List<?> keys, List<?> values) {
-        return new HashMap<>(cMa(new HashMap<>(), keys, values));
     }
 }
